@@ -1,8 +1,6 @@
 # Gentoo image builder
 
-<aside class="notice">
-README is in progress. Thank you for understanding.
-</aside>
+_README is in progress. Thank you for understanding._
 
 As for me, gentoo is really good and flexible linux, but when you need to deploy it to 100
 and more servers - you need a build server.
@@ -56,9 +54,7 @@ For this we can use sync command:
 
 Build means BUILD! Build will always process from scratch, but will use binary packages and stage3 tarball from previous run.
 
-<aside class="notice">
-For the first build we need to download latest stage3 tarball from gentoo download site and place it under `/var/lib/gentoo-build/release/stage3-ARCH-latest.tar.xz` (extension may differ).
-</aside>
+_For the first build we need to download latest stage3 tarball from gentoo download site and place it under `/var/lib/gentoo-build/release/stage3-ARCH-latest.tar.xz` (extension may differ)._
 
 ```./build.rb -a ARCH build```
 
@@ -76,9 +72,7 @@ All build artifacts are not transfered to 'repository' folder by default. You sh
 
 This command will transfer stage3 and stage4 tarballs to release folder and will sync binary packages to arch packages folder.
 
-<aside class="notice">
-You may use `-A` or `--apply` switch to automatically apply all built arches in `build` command.
-</aside>
+_You may use `-A` or `--apply` switch to automatically apply all built arches in `build` command._
 
 `tmp` folder is kept after build and you can chroot to it and emerge/reemerge other packages. After that you can run `apply` once more.
 
