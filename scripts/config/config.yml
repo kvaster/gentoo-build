@@ -1,0 +1,155 @@
+gentoo_mirror: http://distfiles.gentoo.org
+#gentoo_mirror: https://mirror.yandex.ru/gentoo-distfiles
+repository: /var/lib/gentoo-build
+
+#repository_domain: gentoo.somedomain.com
+repository_overlays: [ kvaster ]
+
+ruby: ruby27
+
+groups:
+  amd64:
+    - generic
+    - zen2
+    - core2
+    - broadwell
+    - sandybridge
+    - skylake
+  arm64:
+    - rpi
+
+chost_amd64: &chost_amd64
+  chost: x86_64-pc-linux-gnu
+  os_arch: amd64
+  profile: default/linux/amd64/17.1
+  pkgs_stage4: pkgs_stage4_amd64
+  pkgs_all: pkgs_all_amd64
+  kernel: 5.5.2
+
+chost_arm64: &chost_arm64
+  chost: aarch64-unknown-linux-gnu
+  os_arch: arm64
+  qemu: qemu-aarch64
+  profile: default/linux/arm64/17.0
+  pkgs_stage4: pkgs_stage4_arm64
+  pkgs_all: pkgs_all_arm64
+  kernel: 5.5.3
+
+archs:
+  broadwell:
+    <<: *chost_amd64
+    cflags: -O3 -pipe -march=broadwell -mtune=broadwell -mabm -mrtm -maes
+    x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
+    kernel_config: MBROADWELL
+  core2:
+    <<: *chost_amd64
+    cflags: -O3 -pipe -march=core2 -mtune=core2
+    x86flags: mmx mmxext sse sse2 sse3 ssse3
+    kernel_config: MCORE2
+  generic:
+    <<: *chost_amd64
+    cflags: -O3 -pipe
+    x86flags: ''
+    kernel_config: GENERIC_CPU
+  sandybridge:
+    <<: *chost_amd64
+    cflags: -O3 -pipe -march=sandybridge -mtune=sandybridge
+    x86flags: aes avx mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
+    kernel_config: MSANDYBRIDGE
+  skylake:
+    <<: *chost_amd64
+    cflags: -O3 -pipe -march=skylake -mtune=skylake -mabm
+    x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
+    kernel_config: MSKYLAKE
+  zen2:
+    <<: *chost_amd64
+    cflags: -O3 -pipe -march=znver2 -mtune=znver2
+    x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3
+    kernel_config: MZEN2
+  rpi:
+    <<: *chost_arm64
+    cflags: -O3 -pipe
+
+pkgs_stage4_common: &pkgs_stage4_common
+  - app-admin/metalog
+  - app-admin/sudo
+  - app-arch/p7zip
+  - app-editors/nano
+  - app-editors/vim
+  - app-misc/mc
+  - app-misc/tmux
+  - app-portage/gentoolkit
+  - dev-lang/ruby
+  - net-firewall/iptables
+  - net-firewall/nftables
+  - net-misc/ntp
+  - sys-apps/gptfdisk
+  - sys-apps/iproute2
+  - sys-apps/pciutils
+  - sys-apps/usbutils
+  - sys-fs/dosfstools
+  - sys-kernel/gentoo-sources
+  - sys-kernel/linux-firmware
+  - sys-power/acpi
+  - sys-power/acpid
+  - sys-process/cronie
+
+pkgs_stage4_arm64: &pkgs_stage4_arm64
+  - *pkgs_stage4_common
+
+pkgs_stage4_amd64: &pkgs_stage4_amd64
+  - *pkgs_stage4_common
+  - sys-apps/ipmitool
+  - sys-boot/grub
+  - sys-firmware/intel-microcode
+  - sys-fs/btrfs-progs
+  - sys-fs/compsize
+  - sys-fs/mdadm
+  - sys-kernel/genkernel
+
+pkgs_all_common: &pkgs_all_common
+  - *pkgs_stage4_common
+  - app-portage/layman
+  - app-portage/smart-live-rebuild
+  - dev-db/mongodb
+  - dev-db/postgresql
+  - net-analyzer/tcpdump
+  - net-analyzer/traceroute
+  - net-misc/netkit-telnetd
+  - net-libs/nodejs
+  - www-servers/nginx
+
+pkgs_all_arm64: &pkgs_all_arm64
+  - *pkgs_all_common
+  - *pkgs_stage4_arm64
+
+pkgs_all_amd64: &pkgs_all_amd64
+  - *pkgs_all_common
+  - *pkgs_stage4_amd64
+  - app-admin/helm
+  - app-arch/pixz
+  - app-crypt/certbot
+  - app-crypt/certbot-dns-rfc2136
+  - app-emulation/containerd
+  - app-metrics/alertmanager
+  - app-metrics/node_exporter
+  - app-metrics/prometheus
+  - app-portage/cpuid2cpuflags
+  - dev-java/icedtea
+  - dev-java/nexus-oss-bin
+  - dev-java/openjdk
+  - dev-java/openjdk-bin
+  - dev-vcs/mercurial
+  - dev-vcs/subversion
+  - mail-mta/exim
+  - net-firewall/conntrack-tools
+  - net-firewall/ipset
+  - net-misc/socat
+  - net-dns/bind
+  - net-dns/bind-tools
+  - net-nds/openldap
+  - sys-apps/dbus
+  - sys-cluster/kubeadm
+  - sys-cluster/kubectl
+  - sys-cluster/kubelet
+  - sys-libs/freeipmi

@@ -1,0 +1,43 @@
+# kernel optimizations
+sys-kernel/gentoo-sources experimental
+
+# amd microcode
+sys-kernel/linux-firmware initramfs
+
+# intel microcode
+sys-firmware/intel-microcode initramfs
+
+# openjdk
+dev-java/icedtea -alsa -cups -gtk -webstart headless-awt shenandoah
+dev-java/icedtea-bin -alsa -cups -gtk -webstart headless-awt
+app-text/ghostscript-gpl cups
+dev-java/openjdk -webstart headless-awt gentoo-vm
+dev-java/openjdk-bin -webstart headless-awt
+dev-java/jna -awt
+
+# someone needs
+dev-libs/boehm-gc threads
+
+# syntax
+www-servers/nginx vim-syntax
+
+# genkernel
+sys-apps/util-linux static-libs
+
+# nftables support
+net-firewall/iptables nftables
+net-firewall/nftables xtables
+
+# postgresql
+dev-db/postgresql llvm threads
+
+# bind
+net-dns/bind -berkdb caps dlz
+
+# mail
+mail-mta/exim ldap exiscan-acl maildir
+net-mail/dovecot imapc pop3c ldap
+
+# docker
+app-emulation/docker btrfs
+

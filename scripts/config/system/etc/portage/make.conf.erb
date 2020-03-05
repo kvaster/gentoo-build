@@ -1,0 +1,42 @@
+COMMON_FLAGS="<%= cflags %>"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+
+MAKEOPTS="-j<%= cores %>"
+
+CHOST="<%= chost %>"
+
+FEATURES="getbinpkg parallel-fetch usersync parallel-install"
+FEATURES="${FEATURES} nodoc noinfo"
+<% if build -%>
+FEATURES="${FEATURES} buildpkg fail-clean -ebuild-locks"
+<% end -%>
+<% unless qemu.nil? -%>
+FEATURES="${FEATURES} -pid-sandbox"
+<% end -%>
+
+ACCEPT_KEYWORDS="~<%= os_arch %>"
+ACCEPT_LICENSE="*"
+
+LINGUAS="en"
+L10N="en"
+
+USE="custom-optimization device-mapper"
+USE="${USE} lto pgo"
+<% unless x86flags.nil? -%>
+CPU_FLAGS_X86="<%= x86flags %>"
+<% end -%>
+
+<% unless ruby.nil? -%>
+RUBY_TARGETS="<%= ruby %>"
+
+<% end -%>
+PORTDIR="/var/db/repos/gentoo"
+DISTDIR="/var/cache/distfiles"
+PKGDIR="/var/cache/binpkgs"
+
+PORTAGE_BINHOST="https://<%= repository_domain %>/packages/<%= arch %>"
+EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y --binpkg-changed-deps=y --rebuilt-binaries"
+
