@@ -97,7 +97,7 @@ class Builder
       end
     end
 
-    src = File.join(@gentoo, '/var/cache/binpkgs')
+    src = File.join(@gentoo, 'var/cache/binpkgs')
     if File.exist?(src) && File.exist?(File.join(src, 'Packages'))
       puts 'Copying binpkgs'
       ok = true
@@ -106,6 +106,15 @@ class Builder
         "rsync --delete -a -W #{src}/ #{dst}",
         "PKGDIR=#{dst} emaint binhost --fix"
       ]
+    end
+
+    src = File.join(@gentoo, 'var/cache/genkernel')
+    if File.exist?(src)
+      ok = true
+      dst = File.join(@repo, 'genkernel', @arch)
+      FileUtils.mkdir_p(dst)
+      FileUtils.rm_rf(Dir.glob("#{dst}/*"))
+      FileUtils.cp_r(Dir.glob("#{src}/*"), dst)
     end
 
     if ok
@@ -169,6 +178,21 @@ class Builder
           'scripts/config -d CONFIG_MNATIVE',
           "scripts/config -e CONFIG_#{kernel_config}"
         ], '/usr/src/linux'
+      end
+
+      version = do_forked do
+        Dir.chroot(@gentoo)
+        Dir.chdir('/')
+        `genkernel --version`
+      end.strip
+
+      cache = File.join(@repo, 'genkernel', @arch, version)
+      if File.exist?(cache)
+        puts "Found genkernel cache"
+        FileUtils.rm_rf(Dir.glob("#{dst}/*"))
+        dst = File.join(@gentoo, 'var/cache/genkernel')
+        FileUtils.mkdir_p(dst)
+        FileUtils.cp_r(cache, dst)
       end
 
       chrun [
@@ -277,6 +301,9 @@ class Builder
 
     # make sure we have working resolv.conf
     FileUtils.cp('/etc/resolv.conf', File.join(@gentoo, '/etc/resolv.conf'))
+
+    # make sure distfiles folder exist
+    FileUtils.mkdir_p(File.join(@gentoo, '/var/cache/distfiles'))
 
     # copy qemu-user in case qemu-build
     qemu = @cfg['qemu']
