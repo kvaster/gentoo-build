@@ -189,8 +189,8 @@ class Builder
       cache = File.join(@repo, 'genkernel', @arch, version)
       if File.exist?(cache)
         puts "Found genkernel cache"
-        FileUtils.rm_rf(Dir.glob("#{dst}/*"))
         dst = File.join(@gentoo, 'var/cache/genkernel')
+        FileUtils.rm_rf(Dir.glob("#{dst}/*"))
         FileUtils.mkdir_p(dst)
         FileUtils.cp_r(cache, dst)
       end
