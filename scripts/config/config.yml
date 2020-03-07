@@ -110,12 +110,9 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
 pkgs_all_common: &pkgs_all_common
   - *pkgs_stage4_common
   - app-portage/layman
-  - app-portage/smart-live-rebuild
-  - dev-db/mongodb
   - dev-db/postgresql
   - net-analyzer/tcpdump
   - net-analyzer/traceroute
-  - net-misc/netkit-telnetd
   - net-libs/nodejs
   - www-servers/nginx
 
@@ -135,6 +132,8 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-metrics/node_exporter
   - app-metrics/prometheus
   - app-portage/cpuid2cpuflags
+  - app-portage/smart-live-rebuild
+  - dev-db/mongodb
   - dev-java/icedtea
   - dev-java/nexus-oss-bin
   - dev-java/openjdk
@@ -148,6 +147,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-dns/bind
   - net-dns/bind-tools
   - net-nds/openldap
+  - net-misc/netkit-telnetd
   - sys-apps/dbus
   - sys-cluster/kubeadm
   - sys-cluster/kubectl
