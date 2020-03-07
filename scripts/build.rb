@@ -180,26 +180,29 @@ class Builder
         ], '/usr/src/linux'
       end
 
-      version = do_forked do
-        Dir.chroot(@gentoo)
-        Dir.chdir('/')
-        `genkernel --version`
-      end.strip
+      genkernel = @cfg[genkernel]
+      if genkernel
+        version = do_forked do
+          Dir.chroot(@gentoo)
+          Dir.chdir('/')
+          `genkernel --version`
+        end.strip
 
-      cache = File.join(@repo, 'genkernel', @arch, version)
-      if File.exist?(cache)
-        puts "Found genkernel cache"
-        dst = File.join(@gentoo, 'var/cache/genkernel')
-        FileUtils.rm_rf(Dir.glob("#{dst}/*"))
-        FileUtils.mkdir_p(dst)
-        FileUtils.cp_r(cache, dst)
+        cache = File.join(@repo, 'genkernel', @arch, version)
+        if File.exist?(cache)
+          puts "Found genkernel cache"
+          dst = File.join(@gentoo, 'var/cache/genkernel')
+          FileUtils.rm_rf(Dir.glob("#{dst}/*"))
+          FileUtils.mkdir_p(dst)
+          FileUtils.cp_r(cache, dst)
+        end
       end
 
       chrun [
         "make -j#{CORES}",
         'make modules_install',
         'make install',
-        'genkernel initramfs'
+        genkernel ? 'genkernel initramfs' : []
       ], '/usr/src/linux'
     ensure
       umount
