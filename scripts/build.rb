@@ -69,9 +69,7 @@ def sync_repo(repo)
 
   Dir.children(repo).each do |name|
     o = File.join(repo, name)
-    puts "checkin #{o}"
     if File.exist?(File.join(o, '.git')) || File.exist?(File.join(o, '.hg'))
-      puts "touching #{o}"
       run("touch #{File.join(o, 'metadata', 'timestamp.chk')}")
     end
   end
