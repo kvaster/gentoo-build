@@ -1,6 +1,6 @@
 [DEFAULT]
 main-repo = gentoo
-<% for @overlay in ['gentoo', repository_overlays || []].flatten -%>
+<% for @overlay in ['gentoo', kernel ? 'kernel' : [], repository_overlays || []].flatten -%>
 
 [<%= @overlay %>]
 location = /var/db/repos/<%= @overlay %>

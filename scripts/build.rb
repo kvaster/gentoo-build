@@ -18,6 +18,33 @@ module Helpers
       system(cmd) || raise("error running command: #{cmd}")
     end
   end
+
+  def write_template(template, dst, cfg)
+    if File.file?(template)
+      ErbContext.new(cfg).write(template, dst)
+      return
+    end
+
+    Dir.children(template).sort.each do |base|
+      src = File.join(template, base)
+      if '.clean' == base
+        Dir.glob(File.join(dst, '*')).each { |d| FileUtils.rm_rf(d) }
+      else
+        FileUtils.mkdir_p(dst)
+        ndst = File.join(dst, base)
+        if File.directory?(src)
+          write_template(src, ndst, cfg)
+        else
+          if base.end_with?('.erb')
+            ndst = ndst[0..-5]
+            ErbContext.new(cfg).write(src, ndst)
+          else
+            FileUtils.cp(src, dst)
+          end
+        end
+      end
+    end
+  end
 end
 
 include Helpers
@@ -47,6 +74,11 @@ def sync_repo(repo)
       puts "touching #{o}"
       run("touch #{File.join(o, 'metadata', 'timestamp.chk')}")
     end
+  end
+
+  kernel_repo = File.join(repo, 'kernel')
+  unless File.exist?(kernel_repo)
+    write_template(File.join(CONF_DIR, 'kernel', 'repo'), kernel_repo, {})
   end
 
   FileUtils.rm_rf(tmp)
@@ -124,50 +156,134 @@ class Builder
     end
   end
 
-  def build
-    puts "Preparing - cleanup"
-    cleanup
+  def build(phases)
+    if phases.include?(:init)
+      puts "Preparing - cleanup"
+      cleanup
 
-    puts "Unpacking stage3 tarball"
-    unpack_tarball
+      puts "Unpacking stage3 tarball"
+      unpack_tarball
 
-    puts "Configuring"
-    configure(true)
+      puts "Configuring"
+      configure(true)
 
-    puts "Copying binary packages"
-    copy_binpkgs
+      puts "Copying binary packages"
+      copy_binpkgs
 
-    check_profile
+      check_profile
+    else
+      umount
+    end
 
-    puts "Building stage3"
-    build_stage3
+    if phases.include?(:stage3) || phases.include?(:stage3_build)
+      puts "Building stage3"
+      build_stage3
+    end
 
-    puts "Creating stage3 tarball"
-    create_stage3
+    if phases.include?(:stage3) || phases.include?(:stage3_pack)
+      puts "Creating stage3 tarball"
+      create_stage3
+    end
 
-    puts "Building stage4"
-    build_world(@cfg[@cfg['pkgs_stage4']], false)
+    if @cfg['kernel']
+      if phases.include?(:kernel)
+        puts "Checking if we need to build new kernel"
+        if kernel_check
+          puts "- latest kernel available"
+        else
+          phases += [:kernel_init, :kernel_build]
+        end
+      end
 
-    puts "Building kernel for stage4"
-    build_kernel
+      if phases.include?(:kernel_init)
+        puts "Preparing kernel build environment"
+        kernel_init
+      end
 
-    puts "Creating stage4 tarball"
-    create_stage4
+      if phases.include?(:kernel_build)
+        puts "Building kernel"
+        kernel_build
+      end
+    end
 
-    puts "Building other binary packages"
-    build_world(@cfg[@cfg['pkgs_all']], true)
+    if phases.include?(:stage4) || phases.include?(:stage4_build)
+      puts "Building stage4"
+      build_stage4
+    end
+
+    if phases.include?(:stage4) || phases.include?(:stage4_pack)
+      puts "Creating stage4 tarball"
+      create_stage4
+    end
+
+    if phases.include?(:binpkgs)
+      puts "Building other binary packages"
+      build_world(@cfg[@cfg['pkgs_all']], true)
+    end
 
     puts "Finished"
   end
 
-  def build_kernel
-    configure(false)
+  def kernel_check
+    mounted do
+      version = do_chroot do
+        `emerge -qp gentoo-sources`
+      end
 
-    FileUtils.cp(conf_path('kernel/genkernel.conf'), File.join(@gentoo, 'etc/genkernel.conf'))
+      m = /gentoo-sources-([^ ]+)/.match(version)
+      raise "can't parse kernel version: #{version}" if m.nil?
 
-    mount
-    begin
+      version = m[1]
+      puts "- version is: #{version}"
+
+      File.exist?(File.join(@repo, 'kernel', @arch, "kernel-gentoo-#{@arch}-bin-#{version}.tar.xz"))
+    end
+  end
+
+  def kernel_builder
+    builder = self.clone
+    def builder.set_kernel_vars
+      @orig_gentoo = @gentoo
+      @gentoo = "#{@gentoo}-kernel"
+    end
+    builder.set_kernel_vars
+    builder
+  end
+
+  def kernel_init
+    kernel_builder.kernel_init_impl
+  end
+
+  def kernel_init_impl
+    cleanup
+    run("cp -a --reflink=auto #{@orig_gentoo} #{@gentoo}")
+  end
+
+  def kernel_build
+    kernel_builder.kernel_build_impl
+    mounted do
+      chrun('emerge --sync kernel')
+    end
+  end
+
+  def kernel_build_impl
+    configure(true)
+
+    initramfs = @cfg['initramfs']
+    FileUtils.cp(conf_path('kernel/genkernel.conf'), File.join(@gentoo, 'etc/genkernel.conf')) if initramfs
+
+    mounted do
       chrun('emerge -q1u sys-kernel/gentoo-sources')
+
+      kver = File.basename(File.readlink(File.join(@gentoo, 'usr/src/linux')))
+      m = /linux-(.*)-gentoo(.*)/.match(kver)
+      raise "can't parse version: #{kver}" if m.nil?
+      kver = "#{m[1]}#{m[2]}"
+      kver_l = "#{m[1]}-gentoo#{m[2]}"
+
+      new_mver = /^(\d+\.\d+)\./.match(kver)[1]
+      cfg_mver = /^(\d+\.\d+)\./.match(@cfg['kernel'])[1]
+      raise "config major version is #{cfg_mver}, while new version is #{version}" unless new_mver == cfg_mver
 
       kernel = "kernel-#{@cfg['os_arch']}-#{@cfg['kernel']}.config"
       FileUtils.cp(conf_path('kernel', kernel), File.join(@gentoo, 'usr/src/linux/.config'))
@@ -180,11 +296,8 @@ class Builder
         ], '/usr/src/linux'
       end
 
-      genkernel = @cfg[genkernel]
-      if genkernel
-        version = do_forked do
-          Dir.chroot(@gentoo)
-          Dir.chdir('/')
+      if initramfs
+        version = do_chroot do
           `genkernel --version`
         end.strip
 
@@ -201,11 +314,32 @@ class Builder
       chrun [
         "make -j#{CORES}",
         'make modules_install',
+        @cfg['kernel_dtbs'] ? 'make dtbs_install' : [],
         'make install',
-        genkernel ? 'genkernel initramfs' : []
+        'emerge -1 wireguard-modules',
+        initramfs ? 'genkernel initramfs' : []
       ], '/usr/src/linux'
-    ensure
-      umount
+
+      name = "kernel-gentoo-#{@arch}-bin-#{kver}.tar.xz"
+      local_tarball = "#{@gentoo}/var/cache/distfiles/#{name}"
+      pack = "tar -cJpf #{local_tarball} -C #{@gentoo}"
+      pack = "#{pack} boot/config-#{kver_l} boot/System.map-#{kver_l} boot/vmlinuz-#{kver_l} lib/modules/#{kver_l}"
+      pack = "#{pack} initramfs-#{kver_l}.img" if initramfs
+      pack = "#{pack} boot/dtbs/#{kver_l}" if @cfg['kernel_dtbs']
+      run(pack)
+
+      ebuild_dir = File.join(@gentoo, "var/db/repos/kernel/sys-kernel/gentoo-#{@arch}-bin")
+      FileUtils.mkdir_p(ebuild_dir)
+      ebuild = File.join(ebuild_dir, "gentoo-#{@arch}-bin-#{kver}.ebuild")
+      write_template(conf_path('kernel', 'gentoo-bin.ebuild.erb'), ebuild, @cfg)
+      chrun("ebuild --force /var/db/repos/kernel/sys-kernel/gentoo-#{@arch}-bin/gentoo-#{@arch}-bin-#{kver}.ebuild digest")
+
+      dst = File.join(@repo, 'repos', 'kernel', 'sys-kernel', "gentoo-#{@arch}-bin")
+      FileUtils.mkdir_p(dst)
+      FileUtils.cp_r("#{ebuild_dir}/.", dst)
+
+      FileUtils.mkdir_p(File.join(@repo, 'kernel', @arch))
+      FileUtils.cp(local_tarball, File.join(@repo, 'kernel', @arch, name))
     end
   end
 
@@ -259,6 +393,16 @@ class Builder
         'etc-update --automode -5',
         'eselect news read'
       ]
+    end
+  end
+
+  def build_stage4
+    build_world(@cfg[@cfg['pkgs_stage4']], false)
+
+    if @cfg['kernel']
+      mounted do
+        chrun("FEATURES='-buildpkg' emerge -q sys-kernel/gentoo-#{@arch}-bin")
+      end
     end
   end
 
@@ -323,28 +467,6 @@ class Builder
     write_template(conf_path('system'), @gentoo, cfg)
   end
 
-  def write_template(template, dst, cfg)
-    Dir.children(template).sort.each do |base|
-      src = File.join(template, base)
-      if '.clean' == base
-        Dir.glob(File.join(dst, '*')).each { |d| FileUtils.rm_rf(d) }
-      else
-        FileUtils.mkdir_p(dst)
-        ndst = File.join(dst, base)
-        if File.directory?(src)
-          write_template(src, ndst, cfg)
-        else
-          if base.end_with?('.erb')
-            ndst = ndst[0..-5]
-            ErbContext.new(cfg).write(src, ndst)
-          else
-            FileUtils.cp(src, dst)
-          end
-        end
-      end
-    end
-  end
-
   def mounted
     mount
     begin
@@ -373,15 +495,21 @@ class Builder
 
   def chrun(cmds, dir = '/')
     cmds = [cmds].flatten
-    do_forked do
-      Dir.chroot(@gentoo)
-      Dir.chdir(dir)
+    do_chroot(dir) do
       run(cmds)
     end
   end
 
   def conf_path(*args)
     File.join(CONF_DIR, args)
+  end
+
+  def do_chroot(dir = '/')
+    do_forked do
+      Dir.chroot(@gentoo)
+      Dir.chdir(dir)
+      yield
+    end
   end
 
   def do_forked
@@ -449,6 +577,7 @@ config_dir = File.join(__dir__, 'config')
 build_dir = 'tmp'
 arch = nil
 apply = false
+phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
 
 args = ARGV.clone
 
@@ -460,6 +589,14 @@ opts = OptionParser.new do |opts|
   opts.on('-a', '--arch ARCH', 'List of arches to build or all') { |a| arch = a }
 
   opts.on('-A', '--apply', 'Apply changes after building all archs') { |a| apply = a }
+
+  PHASES_HELP = "Build only theese phases." +
+      " PHASES: init, stage3 (stage3_build, stage3_pack), kernel (kenerl_init, kernel_build)," +
+      " stage4 (stage4_build, stage4_pack), binpkgs"
+
+  opts.on('-p', '--phases PHASES', PHASES_HELP) do
+    |p| phases = p.split(',').map { |ph| ph.to_sym }
+  end
 
   opts.on('-h', '--help', 'Print this help') do
     puts opts
@@ -507,7 +644,7 @@ when 'build'
   check_args(args)
   parse_archs(arch, cfg).each do |a|
     puts "Building #{a}"
-    Builder.new(a, cfg).build
+    Builder.new(a, cfg).build(phases)
   end
 
   if apply

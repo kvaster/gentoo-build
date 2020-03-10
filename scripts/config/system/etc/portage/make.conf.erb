@@ -13,7 +13,7 @@ FEATURES="${FEATURES} nodoc noinfo"
 <% if build -%>
 FEATURES="${FEATURES} buildpkg fail-clean -ebuild-locks"
 <% end -%>
-<% unless qemu.nil? -%>
+<% if build && !qemu.nil? -%>
 FEATURES="${FEATURES} -pid-sandbox"
 <% end -%>
 

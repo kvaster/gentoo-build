@@ -25,7 +25,7 @@ chost_amd64: &chost_amd64
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
   kernel: 5.5.2
-  genkernel: true
+  initramfs: true
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
@@ -34,7 +34,8 @@ chost_arm64: &chost_arm64
   profile: default/linux/arm64/17.0
   pkgs_stage4: pkgs_stage4_arm64
   pkgs_all: pkgs_all_arm64
-  kernel: 5.5.3
+  kernel: 5.5.8
+  kernel_dtbs: true
 
 archs:
   broadwell:
@@ -89,8 +90,6 @@ pkgs_stage4_common: &pkgs_stage4_common
   - sys-apps/pciutils
   - sys-apps/usbutils
   - sys-fs/dosfstools
-  - sys-kernel/genkernel
-  - sys-kernel/gentoo-sources
   - sys-kernel/linux-firmware
   - sys-power/acpi
   - sys-power/acpid
@@ -107,6 +106,7 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
   - sys-fs/btrfs-progs
   - sys-fs/compsize
   - sys-fs/mdadm
+  - sys-kernel/genkernel
 
 pkgs_all_common: &pkgs_all_common
   - *pkgs_stage4_common

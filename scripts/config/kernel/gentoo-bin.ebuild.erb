@@ -1,0 +1,29 @@
+# Copyright 2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+DESCRIPTION="Gentoo binary kernel"
+HOMEPAGE=""
+SRC_URI="https://<%= repository_domain %>/kernel/rpi/kernel-${PN}-${PVR}.tar.xz"
+
+LICENSE="GPL-2"
+SLOT="${PVR}"
+KEYWORDS="~<%= os_arch %>"
+IUSE=""
+
+DEPEND=""
+RDEPEND="${DEPEND}"
+BDEPEND=""
+
+S="${WORKDIR}"
+
+src_install() {
+	insinto /
+	doins -r .
+}
+
+pkg_postrm() {
+	rm -rf /lib/modules/${PVR//${PV}/${PV}-gentoo}
+}
+
