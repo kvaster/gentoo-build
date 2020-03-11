@@ -336,6 +336,7 @@ class Builder
       dst = File.join(@repo, 'repos', 'kernel', 'sys-kernel', "gentoo-#{@arch}-bin")
       FileUtils.mkdir_p(dst)
       FileUtils.cp_r("#{ebuild_dir}/.", dst)
+      FileUtils.touch(File.join(@repo, 'repos', 'kernel', 'metadata', 'timestamp.chk'))
 
       FileUtils.mkdir_p(File.join(@repo, 'kernel', @arch))
       FileUtils.cp(local_tarball, File.join(@repo, 'kernel', @arch, name))
