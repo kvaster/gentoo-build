@@ -296,6 +296,7 @@ class Builder
 
       if initramfs
         version = do_chroot do
+          run('emerge -q1u sys-kernel/genkernel')
           `genkernel --version`
         end.strip
 
@@ -322,7 +323,7 @@ class Builder
       local_tarball = "#{@gentoo}/var/cache/distfiles/#{name}"
       pack = "tar -cJpf #{local_tarball} -C #{@gentoo}"
       pack = "#{pack} boot/config-#{kver_l} boot/System.map-#{kver_l} boot/vmlinuz-#{kver_l} lib/modules/#{kver_l}"
-      pack = "#{pack} initramfs-#{kver_l}.img" if initramfs
+      pack = "#{pack} boot/initramfs-#{kver_l}.img" if initramfs
       pack = "#{pack} boot/dtbs/#{kver_l}" if @cfg['kernel_dtbs']
       run(pack)
 
@@ -378,14 +379,27 @@ class Builder
 
   def build_stage3
     mounted do
+      puts 'Updating portage tree'
       chrun [
         'env-update',
         'emerge -q --sync',
-        'env-update',
-        'emerge -q1u portage',
+        'env-update'
+      ]
+
+      puts 'Updating portage'
+      chrun [
+        'emerge -q1u portage'
+      ]
+
+      puts 'Updating gcc'
+      chrun [
         'emerge -q1u gcc binutils glibc',
         'emerge -q --prune gcc binutils glibc',
-        'env-update',
+        'env-update'
+      ]
+
+      puts 'Updating system'
+      chrun [
         'emerge -qe @system --keep-going --with-bdeps=y',
         'emerge -q --depclean',
         'etc-update --automode -5',
