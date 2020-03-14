@@ -23,7 +23,7 @@ src_install() {
 	doins -r .
 }
 
-pkg_postrm() {
+pkg_prerm() {
 	rm -rf /lib/modules/${PVR//${PV}/${PV}-gentoo}
 }
 

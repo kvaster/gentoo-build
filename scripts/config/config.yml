@@ -115,6 +115,7 @@ pkgs_all_common: &pkgs_all_common
   - net-analyzer/tcpdump
   - net-analyzer/traceroute
   - net-libs/nodejs
+  - net-vpn/wireguard-tools
   - www-servers/nginx
 
 pkgs_all_arm64: &pkgs_all_arm64
