@@ -70,7 +70,7 @@ archs:
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3
     kernel_config: MZEN2
   goldmontplus:
-    <<: &chost_amd64
+    <<: *chost_amd64
     cflags: -O3 -pipe -march=goldmont-plus -mtune=goldmont-plus
     x86flags: aes mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 ssse3
     kernel_config: MGOLDMONTPLUS
