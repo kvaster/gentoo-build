@@ -51,7 +51,7 @@ include Helpers
 
 #--------------------------
 
-def sync_repo(repo)
+def sync_repo(repo, repos)
   repo = File.join(repo, 'repos')
   FileUtils.mkdir_p(repo)
 
@@ -65,7 +65,7 @@ def sync_repo(repo)
     erb.write(f, File.join(conf_dir, File.basename(f)))
   end
 
-  run("PORTAGE_CONFIGROOT=#{tmp} emerge --sync")
+  run("PORTAGE_CONFIGROOT=#{tmp} emerge --sync #{repos}")
 
   Dir.children(repo).each do |name|
     o = File.join(repo, name)
@@ -354,7 +354,7 @@ class Builder
     mounted do
       chrun [
         'env-update',
-        'emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y',
+        'emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going',
         'emerge -q @preserved-rebuild',
         'emerge -q --depclean',
         'etc-update --automode -5',
@@ -630,6 +630,12 @@ CORES = Etc.nprocessors
 
 action = args.shift
 
+sync_repos = ""
+if action == 'sync'
+  sync_repos = args.join(' ')
+  args = []
+end
+
 cfg = YAML.load(File.new(File.join(CONF_DIR, 'config.yml')))
 
 if File.exist?('config.user.yml')
@@ -651,7 +657,7 @@ end
 case action
 when 'sync'
   check_args(args)
-  sync_repo(cfg['repository'])
+  sync_repo(cfg['repository'], sync_repos)
 
 when 'build'
   check_args(args)
