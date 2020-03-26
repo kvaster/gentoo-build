@@ -16,14 +16,21 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+KPV="${PVR//${PV}/${PV}-gentoo}"
+
 S="${WORKDIR}"
 
 src_install() {
 	insinto /
-	doins -r .
+	doins -r boot
+	insinto /opt/kernel-modules
+	doins -r lib/modules/${KPV}
 }
 
 pkg_prerm() {
-	rm -rf /lib/modules/${PVR//${PV}/${PV}-gentoo}
+	rm -rf /lib/modules/${KPV}
 }
 
+pkg_postinst() {
+	cp -a /opt/kernel-modules/${KPV} /lib/modules
+}
