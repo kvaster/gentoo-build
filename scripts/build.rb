@@ -315,7 +315,6 @@ class Builder
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'make dtbs_install' : [],
         'make install',
-        'emerge -1 wireguard-modules',
         initramfs ? 'genkernel initramfs' : []
       ], '/usr/src/linux'
 
