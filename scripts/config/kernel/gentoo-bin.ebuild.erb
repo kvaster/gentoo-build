@@ -32,5 +32,6 @@ pkg_prerm() {
 }
 
 pkg_postinst() {
+	mkdir -p /lib/modules
 	cp -a /opt/kernel-modules/${KPV} /lib/modules
 }
