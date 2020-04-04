@@ -327,7 +327,7 @@ class Builder
       if @cfg['kernel_pkgs']
         pkgs = @cfg['kernel_pkgs']
         pkgs = pkgs.flatten.uniq.join(' ') if pkgs.is_a?(Array)
-        chrin("emerge -q1 #{pkgs}")
+        chrun("emerge -q1 #{pkgs}")
       end
 
       chrun('genkernel initramfs', '/usr/src/linux') if initramfs
