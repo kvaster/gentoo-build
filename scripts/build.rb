@@ -224,8 +224,14 @@ class Builder
 
   def kernel_check
     mounted do
+      version = kernel_version
+      File.exist?(File.join(@repo, 'kernel', @arch, "kernel-gentoo-#{@arch}-bin-#{version}.tar.xz"))
+    end
+  end
+
+  def kernel_version
       version = do_chroot do
-        `emerge -qp gentoo-sources`
+        `emerge -qp "=gentoo-sources-#{@cfg['kernel']}*"`
       end
 
       m = /gentoo-sources-([^ ]+)/.match(version)
@@ -234,8 +240,7 @@ class Builder
       version = m[1]
       puts "- version is: #{version}"
 
-      File.exist?(File.join(@repo, 'kernel', @arch, "kernel-gentoo-#{@arch}-bin-#{version}.tar.xz"))
-    end
+      version
   end
 
   def kernel_builder
@@ -271,17 +276,19 @@ class Builder
     FileUtils.cp(conf_path('kernel/genkernel.conf'), File.join(@gentoo, 'etc/genkernel.conf')) if initramfs
 
     mounted do
-      chrun('emerge -q1u sys-kernel/gentoo-sources')
+      version = kernel_version
+
+      m = /([^-]+)(-r.*)?/.match(version)
+      kver_l = "#{m[1]}-gentoo#{m[2] || ''}"
+
+      chrun(%{emerge -q1u "=gentoo-sources-#{version}"})
+      chrun("eselect kernel set linux-#{kver_l}")
 
       kver = File.basename(File.readlink(File.join(@gentoo, 'usr/src/linux')))
       m = /linux-(.*)-gentoo(.*)/.match(kver)
       raise "can't parse version: #{kver}" if m.nil?
       kver = "#{m[1]}#{m[2]}"
-      kver_l = "#{m[1]}-gentoo#{m[2]}"
-
-      new_mver = /^(\d+\.\d+)\./.match(kver)[1]
-      cfg_mver = /^(\d+\.\d+)\./.match(@cfg['kernel'])[1]
-      raise "config major version is #{cfg_mver}, while new version is #{version}" unless new_mver == cfg_mver
+      raise "version mismatch: #{version} / #{kver}" unless version == kver
 
       kernel = "kernel-#{@cfg['os_arch']}-#{@cfg['kernel']}.config"
       FileUtils.cp(conf_path('kernel', kernel), File.join(@gentoo, 'usr/src/linux/.config'))
