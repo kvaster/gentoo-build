@@ -37,6 +37,8 @@ chost_arm64: &chost_arm64
   pkgs_all: pkgs_all_arm64
   kernel: "5.5"
   kernel_dtbs: true
+  kernel_pkgs:
+    - net-vpn/wireguard-modules
 
 archs:
   broadwell:

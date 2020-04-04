@@ -322,8 +322,15 @@ class Builder
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'make dtbs_install' : [],
         'make install',
-        initramfs ? 'genkernel initramfs' : []
       ], '/usr/src/linux'
+
+      if @cfg['kernel_pkgs']
+        pkgs = @cfg['kernel_pkgs']
+        pkgs = pkgs.flatten.uniq.join(' ') if pkgs.is_a?(Array)
+        chrin("emerge -q1 #{pkgs}")
+      end
+
+      chrun('genkernel initramfs', '/usr/src/linux') if initramfs
 
       name = "kernel-gentoo-#{@arch}-bin-#{kver}.tar.xz"
       local_tarball = "#{@gentoo}/var/cache/distfiles/#{name}"
