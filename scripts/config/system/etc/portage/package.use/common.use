@@ -41,3 +41,6 @@ net-mail/dovecot imapc pop3c ldap
 # docker
 app-emulation/docker btrfs
 
+# kubernetes
+sys-cluster/kubernetes -kube-apiserver -kube-controller-manager -kube-proxy -kube-scheduler
+

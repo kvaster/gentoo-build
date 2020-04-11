@@ -138,6 +138,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-arch/pixz
   - app-crypt/certbot
   - app-crypt/certbot-dns-rfc2136
+  - app-emulation/cri-tools
   - app-emulation/containerd
   - app-metrics/alertmanager
   - app-metrics/node_exporter
@@ -160,7 +161,5 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-nds/openldap
   - net-misc/netkit-telnetd
   - sys-apps/dbus
-  - sys-cluster/kubeadm::kvaster
-  - sys-cluster/kubectl::kvaster
-  - sys-cluster/kubelet::kvaster
+  - sys-cluster/kubernetes::kvaster
   - sys-libs/freeipmi
