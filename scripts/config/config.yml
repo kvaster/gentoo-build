@@ -160,7 +160,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-nds/openldap
   - net-misc/netkit-telnetd
   - sys-apps/dbus
-  - sys-cluster/kubeadm
-  - sys-cluster/kubectl
-  - sys-cluster/kubelet
+  - sys-cluster/kubeadm::kvaster
+  - sys-cluster/kubectl::kvaster
+  - sys-cluster/kubelet::kvaster
   - sys-libs/freeipmi
