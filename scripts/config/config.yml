@@ -27,6 +27,8 @@ chost_amd64: &chost_amd64
   pkgs_all: pkgs_all_amd64
   kernel: "5.6"
   initramfs: true
+  kernel_build_pkgs:
+    - app-arch/zstd
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu

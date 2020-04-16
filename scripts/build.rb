@@ -254,6 +254,12 @@ class Builder
   end
 
   def kernel_init
+    pkgs = @cfg['kernel_build_pkgs']
+    unless pkgs.nil?
+      mounted do
+        chrun "emerge -q1u #{pkgs.join(' ')}"
+      end
+    end
     kernel_builder.kernel_init_impl
   end
 
