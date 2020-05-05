@@ -47,3 +47,6 @@ app-emulation/containerd btrfs
 # kubernetes
 sys-cluster/kubernetes -kube-apiserver -kube-controller-manager -kube-proxy -kube-scheduler
 
+# mc -> depends on itstool which needs python
+dev-libs/libxml2 python
+
