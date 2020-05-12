@@ -50,3 +50,6 @@ sys-cluster/kubernetes -kube-apiserver -kube-controller-manager -kube-proxy -kub
 # mc -> depends on itstool which needs python
 dev-libs/libxml2 python
 
+# nodejs + pm2
+net-libs/nodejs inspector icu
+
