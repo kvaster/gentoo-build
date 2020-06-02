@@ -1,2 +1,0 @@
-# icedtea and openjdk does not build
-=sys-devel/gcc-10.1.0

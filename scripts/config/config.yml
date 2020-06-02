@@ -148,14 +148,12 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-portage/cpuid2cpuflags
   - app-portage/smart-live-rebuild
   - dev-db/mongodb
-  - dev-java/icedtea
-  - dev-java/icedtea-bin
   - dev-java/nexus-oss-bin
+  - dev-java/openjdk:8
   - dev-java/openjdk:11
-  - dev-java/openjdk:13
   - dev-java/openjdk:14
+  - dev-java/openjdk-bin:8
   - dev-java/openjdk-bin:11
-  - dev-java/openjdk-bin:13
   - dev-java/openjdk-bin:14
   - dev-vcs/mercurial
   - dev-vcs/subversion
