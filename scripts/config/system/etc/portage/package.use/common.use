@@ -7,6 +7,9 @@ sys-kernel/linux-firmware initramfs
 # intel microcode
 sys-firmware/intel-microcode initramfs
 
+# gcc use zstd
+sys-devel/gcc zstd
+
 # openjdk
 dev-java/icedtea -alsa -cups -gtk -webstart headless-awt shenandoah
 dev-java/icedtea-bin -alsa -cups -gtk -webstart headless-awt
