@@ -623,7 +623,7 @@ opts = OptionParser.new do |opts|
   opts.on('-A', '--apply', 'Apply changes after building all archs') { |a| apply = a }
 
   PHASES_HELP = "Build only theese phases." +
-      " PHASES: init, stage3 (stage3_build, stage3_pack), kernel (kenerl_init, kernel_build)," +
+      " PHASES: init, stage3 (stage3_build, stage3_pack), kernel (kernel_init, kernel_build)," +
       " stage4 (stage4_build, stage4_pack), binpkgs"
 
   opts.on('-p', '--phases PHASES', PHASES_HELP) do
