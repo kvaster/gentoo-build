@@ -128,6 +128,7 @@ pkgs_all_common: &pkgs_all_common
   - net-libs/nodejs
   - net-vpn/wireguard-tools
   - www-servers/nginx
+  - net-misc/dhcpcd
 
 pkgs_all_arm64: &pkgs_all_arm64
   - *pkgs_all_common
