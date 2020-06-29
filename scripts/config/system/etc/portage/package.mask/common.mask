@@ -1,0 +1,2 @@
+# does not build due to CONTRIBUTING.md
+=app-metrics/alertmanager-0.21.0
