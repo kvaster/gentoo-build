@@ -606,7 +606,7 @@ end
 #--------------------------
 
 config_dir = File.join(__dir__, 'config')
-build_dir = 'tmp'
+build_dir = '../build-tmp'
 arch = nil
 apply = false
 phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
