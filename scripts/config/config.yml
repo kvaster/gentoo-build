@@ -25,7 +25,7 @@ chost_amd64: &chost_amd64
   profile: default/linux/amd64/17.1
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
-  kernel: "5.7"
+  kernel: "5.8"
   initramfs: true
   kernel_build_pkgs:
     - app-arch/zstd
