@@ -2,6 +2,8 @@
 
 _README is in progress. Thank you for understanding._
 
+## Intro
+
 As for me, gentoo is really good and flexible linux, but when you need to deploy it to 100
 and more servers - you need a build server.
 
@@ -11,6 +13,11 @@ There will be three results of the build process:
 * New (latest, optimized) stage3 tarball
 * New stage4 taraball - this image can be deployed with minimal configuration on real server
 * Binary packages for different software we may need later for different setups.
+
+## Current quircks/hacks (to be removed when resolved)
+
+* gcc on rpi can't be built with lto enabled - lto is turned off for now
+* llvm on goldmont-plus can't be built with native optimization - core2 optimizations are used for llvm on goldmont-plus
 
 ## My gentoo preferences
 
