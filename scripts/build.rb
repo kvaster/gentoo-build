@@ -517,7 +517,7 @@ class Builder
   end
 
   def umount
-    system("umount -qR #{@gentoo}/{sys,proc,dev}")
+    system("umount -qlR #{@gentoo}/{sys,proc,dev}")
   end
 
   def cleanup
