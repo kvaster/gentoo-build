@@ -162,9 +162,9 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-firewall/conntrack-tools
   - net-firewall/ipset
   - net-misc/socat
-  - net-dns/bind
   - net-dns/bind-tools
   - net-dns/knot
+  - net-dns/knot-resolver
   - net-nds/openldap
   - net-misc/netkit-telnetd
   - sys-apps/dbus
