@@ -112,6 +112,14 @@ class Builder
     run("PKGDIR=#{dst} emaint binhost --fix")
   end
 
+  def exec(cmd)
+    puts "Executing action for #{@arch}"
+
+    mounted do
+      chrun(cmd)
+    end
+  end
+
   def apply
     puts "Applying tarball and binary packages for #{@arch}"
 
@@ -703,6 +711,12 @@ when 'delpkg'
   check_args(args)
   parse_archs(arch, cfg).each do |a|
     Builder.new(a, cfg).drop_package(name)
+  end
+
+when 'exec'
+  raise 'error in args' if args.empty?
+  parse_archs(arch, cfg).each do |a|
+    Builder.new(a, cfg).exec(args.join(' '))
   end
 
 else
