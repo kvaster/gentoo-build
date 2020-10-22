@@ -1,6 +1,3 @@
 # does not build due to CONTRIBUTING.md
 =app-metrics/alertmanager-0.21.0
 
-# bind overrides bind-tools files
-=net-dns/bind-9.16.4
-
