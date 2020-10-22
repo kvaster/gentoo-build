@@ -446,20 +446,31 @@ class Builder
     end
   end
 
-  def check_profile
-    pp = File.join(@gentoo, 'etc/portage/make.profile')
+  def get_profile(pp)
     pl = File.readlink(pp)
 
     m = /(.*)\/profiles\/(.*)/.match(pl)
-    profile = m[2]
 
-    raise "profile is not supported: #{profile}, probably need migration" unless profile == @cfg['profile']
+    return m[1], m[2]
+  end
 
-    base = '../../var/db/repos/gentoo'
+  def check_profile
+    pp = File.join(@gentoo, 'etc/portage/make.profile')
+    base, profile = get_profile(pp)
 
-    unless m[1] == base
-      puts "Fixing profile path from #{m[1]} to #{base}"
-      FileUtils.ln_s("#{base}/profiles/#{profile}", pp, force: true)
+    d_profile = @cfg['profile']
+    d_base = '../../var/db/repos/gentoo'
+
+    if "#{profile}/desktop/plasma" == d_profile
+      FileUtils.ln_s("#{d_base}/profiles/#{d_profile}", pp, force: true)
+      base, profile = get_profile(pp)
+    end
+
+    raise "profile is not supported: #{profile}, probably need migration" unless profile == d_profile
+
+    unless base == d_base
+      puts "Fixing profile path from #{base} to #{d_base}"
+      FileUtils.ln_s("#{d_base}/profiles/#{profile}", pp, force: true)
     end
   end
 
