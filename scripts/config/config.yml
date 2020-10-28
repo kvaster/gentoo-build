@@ -170,6 +170,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-misc/netkit-telnetd
   - sys-apps/dbus
   - sys-cluster/kubeadm
-  - sys-cluster/kubernetes
+  - sys-cluster/kubelet
+  - sys-cluster/kubectl
   - sys-cluster/keepalived
   - sys-libs/freeipmi
