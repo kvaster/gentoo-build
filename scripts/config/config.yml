@@ -80,7 +80,7 @@ archs:
     kernel_config: MGOLDMONTPLUS
   rpi:
     <<: *chost_arm64
-    cflags: -O3 -pipe
+    cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a53
 
 pkgs_stage4_common: &pkgs_stage4_common
   - app-admin/metalog
