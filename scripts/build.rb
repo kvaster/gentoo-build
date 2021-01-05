@@ -407,6 +407,11 @@ class Builder
 
   def build_stage3
     mounted do
+      puts 'Python cleanup'
+      chrun [
+        'eselect python cleanup'
+      ]
+
       puts 'Updating portage tree'
       chrun [
         'env-update',
@@ -431,7 +436,8 @@ class Builder
         'emerge -qe @system --keep-going --with-bdeps=y',
         'emerge -q --depclean',
         'etc-update --automode -5',
-        'eselect news read'
+        'eselect news read',
+        'eselect python cleanup'
       ]
     end
   end
