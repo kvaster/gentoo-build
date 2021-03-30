@@ -381,7 +381,7 @@ class Builder
     mounted do
       chrun [
         'env-update',
-        'emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going',
+        'emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going || emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going',
         'emerge -q @preserved-rebuild',
         'emerge -q --depclean',
         'etc-update --automode -5',
