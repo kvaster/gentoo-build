@@ -310,6 +310,7 @@ class Builder
       kernel_config = @cfg['kernel_config']
       unless kernel_config.nil?
         chrun [
+          'scripts/config -d CONFIG_GENERIC_CPU',
           'scripts/config -d CONFIG_MNATIVE',
           "scripts/config -e CONFIG_#{kernel_config}"
         ], '/usr/src/linux'
