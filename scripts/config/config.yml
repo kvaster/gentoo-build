@@ -129,6 +129,7 @@ pkgs_all_common: &pkgs_all_common
   - net-misc/dhcpcd
   - net-vpn/wireguard-tools
   - sys-apps/ethtool
+  - sys-apps/yarn
   - www-servers/nginx
 
 pkgs_all_arm64: &pkgs_all_arm64

@@ -2,6 +2,8 @@
 
 _README is in progress. Thank you for understanding._
 
+TODO is [here](TODO.md)
+
 ## Intro
 
 As for me, gentoo is really good and flexible linux, but when you need to deploy it to 100
