@@ -18,6 +18,7 @@ groups:
     - goldmontplus
   arm64:
     - rpi
+    - rpi4
 
 chost_amd64: &chost_amd64
   chost: x86_64-pc-linux-gnu
@@ -81,6 +82,9 @@ archs:
   rpi:
     <<: *chost_arm64
     cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a53
+  rpi4:
+    <<: *chost_arm64
+    cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a72
 
 pkgs_stage4_common: &pkgs_stage4_common
   - app-admin/metalog
@@ -100,6 +104,8 @@ pkgs_stage4_common: &pkgs_stage4_common
   - sys-apps/iproute2
   - sys-apps/pciutils
   - sys-apps/usbutils
+  - sys-fs/btrfs-progs
+  - sys-fs/compsize
   - sys-fs/dosfstools
   - sys-kernel/linux-firmware
   - sys-power/acpi
@@ -114,8 +120,6 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
   - sys-apps/ipmitool
   - sys-boot/grub
   - sys-firmware/intel-microcode
-  - sys-fs/btrfs-progs
-  - sys-fs/compsize
   - sys-fs/mdadm
   - sys-kernel/genkernel
 
