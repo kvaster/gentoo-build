@@ -102,6 +102,7 @@ pkgs_stage4_common: &pkgs_stage4_common
   - net-misc/ntp
   - net-wireless/bluez
   - net-wireless/iw
+  - net-wireless/wpa_supplicant
   - sys-apps/gptfdisk
   - sys-apps/iproute2
   - sys-apps/pciutils
@@ -116,6 +117,7 @@ pkgs_stage4_common: &pkgs_stage4_common
 
 pkgs_stage4_arm64: &pkgs_stage4_arm64
   - *pkgs_stage4_common
+  - dev-embedded/rpi-eeprom
 
 pkgs_stage4_amd64: &pkgs_stage4_amd64
   - *pkgs_stage4_common
