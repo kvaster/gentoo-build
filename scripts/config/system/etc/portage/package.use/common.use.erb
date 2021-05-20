@@ -9,9 +9,6 @@ sys-firmware/intel-microcode initramfs
 
 # gcc use zstd
 sys-devel/gcc zstd
-<% if os_arch == 'arm64' -%>
-<=sys-devel/gcc-10.2.1 -lto
-<% end -%>
 
 # openjdk
 dev-java/icedtea -alsa -cups -gtk -webstart headless-awt shenandoah
@@ -56,7 +53,7 @@ dev-libs/libxml2 python
 # nodejs + pm2
 net-libs/nodejs inspector icu
 # gcc-11+lto = runtime errors
-<=net-libs/nodejs-16.1.0 -lto
+<=net-libs/nodejs-16.2.0 -lto
 
 # lizardfs
 sys-cluster/lizardfs cgi
