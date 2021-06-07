@@ -129,6 +129,7 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
 
 pkgs_all_common: &pkgs_all_common
   - *pkgs_stage4_common
+  - app-metrics/nut_exporter
   - app-portage/layman
   - dev-db/postgresql
   - net-analyzer/tcpdump
