@@ -129,6 +129,7 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
 
 pkgs_all_common: &pkgs_all_common
   - *pkgs_stage4_common
+  - app-metrics/node_exporter
   - app-metrics/nut_exporter
   - app-portage/layman
   - dev-db/postgresql
@@ -156,7 +157,6 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-emulation/cri-tools
   - app-emulation/containerd
   - app-metrics/alertmanager
-  - app-metrics/node_exporter
   - app-metrics/prometheus
   - app-portage/cpuid2cpuflags
   - app-portage/smart-live-rebuild
