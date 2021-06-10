@@ -1,1 +1,1 @@
-app-metrics/node_exporter ~*
+app-metrics/node_exporter * ~*
