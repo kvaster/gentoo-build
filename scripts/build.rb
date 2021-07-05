@@ -408,11 +408,6 @@ class Builder
 
   def build_stage3
     mounted do
-      puts 'Python cleanup'
-      chrun [
-        'eselect python cleanup'
-      ]
-
       puts 'Updating portage tree'
       chrun [
         'env-update',
