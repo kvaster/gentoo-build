@@ -52,8 +52,8 @@ dev-libs/libxml2 python
 
 # nodejs + pm2
 net-libs/nodejs inspector icu
-# gcc-11+lto = runtime errors
-<=net-libs/nodejs-16.4.0 -lto
+# gcc-11+lto = runtime errors, https://github.com/nodejs/node/issues/38501
+net-libs/nodejs -lto
 
 # lizardfs
 sys-cluster/lizardfs cgi
