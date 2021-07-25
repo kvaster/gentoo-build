@@ -164,12 +164,10 @@ pkgs_all_amd64: &pkgs_all_amd64
   - dev-java/nexus-oss-bin
   - dev-java/openjdk:8
   - dev-java/openjdk:11
-  - dev-java/openjdk:14
-  - dev-java/openjdk:15
+  - dev-java/openjdk:16
   - dev-java/openjdk-bin:8
   - dev-java/openjdk-bin:11
-  - dev-java/openjdk-bin:14
-  - dev-java/openjdk-bin:15
+  - dev-java/openjdk-bin:16
   - dev-vcs/mercurial
   - dev-vcs/subversion
   - mail-mta/exim
