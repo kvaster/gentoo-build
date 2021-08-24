@@ -65,6 +65,8 @@ def sync_repo(repo, repos)
     erb.write(f, File.join(conf_dir, File.basename(f)))
   end
 
+  FileUtils.ln_s("#{repo}/gentoo/profiles/default", "#{tmp}/etc/portage/make.profile")
+
   run("PORTAGE_CONFIGROOT=#{tmp} emerge --sync #{repos}")
 
   Dir.children(repo).each do |name|
