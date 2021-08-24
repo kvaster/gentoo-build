@@ -1,2 +1,0 @@
-# does not build due to strange patches
-=sys-apps/portage-3.0.22
