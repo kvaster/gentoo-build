@@ -377,7 +377,9 @@ class Builder
     if is_kernel
       kernel_builder.shell(false)
     else
-      chrun('/bin/bash', '/root')
+      mounted do
+        chrun('/bin/bash', '/root')
+      end
     end
   end
 
@@ -440,6 +442,7 @@ class Builder
       puts 'Updating system'
       chrun [
         'emerge -qe @system --keep-going --with-bdeps=y',
+        'emerge -q1u sys-fs/udev', # remove after migration
         'emerge -q --depclean',
         'etc-update --automode -5',
         'eselect news read',
