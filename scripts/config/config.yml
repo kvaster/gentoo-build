@@ -132,6 +132,7 @@ pkgs_all_common: &pkgs_all_common
   - app-metrics/node_exporter
   - app-metrics/nut_exporter
   - app-portage/layman
+  - dev-db/mongodb
   - dev-db/postgresql
   - net-analyzer/tcpdump
   - net-analyzer/traceroute
@@ -160,7 +161,6 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-metrics/prometheus
   - app-portage/cpuid2cpuflags
   - app-portage/smart-live-rebuild
-  - dev-db/mongodb
   - dev-java/nexus-oss-bin
   - dev-java/openjdk:8
   - dev-java/openjdk:11
