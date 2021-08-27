@@ -373,6 +373,14 @@ class Builder
     end
   end
 
+  def shell(is_kernel)
+    if is_kernel
+      kernel_builder.shell(false)
+    else
+      chrun('/bin/bash', '/root')
+    end
+  end
+
   def build_world(pkgs, clean)
     pkgs = pkgs.flatten.uniq.sort
     File.open(File.join(@gentoo, 'var/lib/portage/world'), 'w') do |f|
@@ -627,6 +635,14 @@ end
 
 #--------------------------
 
+def is_kernel?(args)
+  is_kernel = args.shift
+  raise 'kernel arg error' unless [nil, 't', 'true', 'kernel'].include?(is_kernel)
+  return !is_kernel.nil?
+end
+
+#--------------------------
+
 config_dir = File.join(__dir__, 'config')
 build_dir = '../build-tmp'
 arch = nil
@@ -636,7 +652,7 @@ phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
 args = ARGV.clone
 
 opts = OptionParser.new do |opts|
-  opts.banner = 'Usage: build.rb [options] sync|build|apply|delpkg|configure'
+  opts.banner = 'Usage: build.rb [options] sync|build|apply|delpkg|configure|shell'
 
   opts.on('-c', '--config DIR', 'Config dir') { |c| config_dir = c }
 
@@ -738,6 +754,13 @@ when 'configure'
   parse_archs(arch, cfg).each do |a|
     Builder.new(a, cfg).configure(true)
   end
+
+when 'shell'
+  is_kernel = is_kernel?(args)
+  raise 'error in args' unless args.empty?
+  archs = parse_archs(arch, cfg)
+  raise 'only one arch allowed' unless archs.size == 1
+  Builder.new(archs[0], cfg).shell(is_kernel)
 
 else
   raise "unknown action: #{action}"
