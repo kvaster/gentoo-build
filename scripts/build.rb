@@ -636,7 +636,7 @@ phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
 args = ARGV.clone
 
 opts = OptionParser.new do |opts|
-  opts.banner = 'Usage: build.rb [options] sync|build|apply|delpkg'
+  opts.banner = 'Usage: build.rb [options] sync|build|apply|delpkg|configure'
 
   opts.on('-c', '--config DIR', 'Config dir') { |c| config_dir = c }
 
@@ -731,6 +731,12 @@ when 'exec'
   raise 'error in args' if args.empty?
   parse_archs(arch, cfg).each do |a|
     Builder.new(a, cfg).exec(args.join(' '))
+  end
+
+when 'configure'
+  raise 'error in args' if args.empty?
+  parse_archs(arch, cfg).each do |a|
+    Builder.new(a, cfg).configure(true)
   end
 
 else
