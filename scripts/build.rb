@@ -734,7 +734,7 @@ when 'exec'
   end
 
 when 'configure'
-  raise 'error in args' if args.empty?
+  raise 'error in args' unless args.empty?
   parse_archs(arch, cfg).each do |a|
     Builder.new(a, cfg).configure(true)
   end
