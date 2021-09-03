@@ -101,6 +101,7 @@ pkgs_stage4_common: &pkgs_stage4_common
   - net-firewall/nftables
   - net-misc/ntp
   - net-wireless/bluez
+  - net-wireless/hostapd
   - net-wireless/iw
   - net-wireless/wpa_supplicant
   - sys-apps/gptfdisk
