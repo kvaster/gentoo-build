@@ -132,6 +132,7 @@ pkgs_all_common: &pkgs_all_common
   - *pkgs_stage4_common
   - app-metrics/node_exporter
   - app-metrics/nut_exporter
+  - app-misc/mosquitto
   - app-portage/layman
   - dev-db/mongodb
   - dev-db/postgresql
@@ -161,6 +162,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-emulation/containerd
   - app-metrics/alertmanager
   - app-metrics/prometheus
+  - app-metrics/VictoriaMetrics
   - app-portage/cpuid2cpuflags
   - app-portage/smart-live-rebuild
   - dev-java/nexus-oss-bin
@@ -173,6 +175,8 @@ pkgs_all_amd64: &pkgs_all_amd64
   - dev-vcs/mercurial
   - dev-vcs/subversion
   - mail-mta/exim
+  - media-video/ffmpeg
+  - net-dialup/ppp
   - net-firewall/conntrack-tools
   - net-firewall/ipset
   - net-misc/miniupnpd
@@ -189,3 +193,4 @@ pkgs_all_amd64: &pkgs_all_amd64
   - sys-cluster/keepalived
   - sys-cluster/lizardfs
   - sys-libs/freeipmi
+  - www-apps/grafana
