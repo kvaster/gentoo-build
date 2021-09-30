@@ -134,6 +134,7 @@ pkgs_all_common: &pkgs_all_common
   - app-metrics/nut_exporter
   - app-misc/mosquitto
   - app-portage/layman
+  - app-shells/fzf
   - dev-db/mongodb
   - dev-db/postgresql
   - net-dns/dnsmasq
