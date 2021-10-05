@@ -442,10 +442,15 @@ class Builder
       puts 'Updating system'
       chrun [
         'emerge -qe @system --keep-going --with-bdeps=y',
-        'emerge -q1u sys-fs/udev', # remove after migration
+        'emerge -q1u sys-fs/udev sys-apps/systemd-tmpfiles', # remove after migration
         'emerge -q --depclean',
         'etc-update --automode -5',
         'eselect news read',
+      ]
+
+      puts 'Cleanup stage3'
+      chrun [
+        'emerge -q --depclean'
       ]
     end
   end
