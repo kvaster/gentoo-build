@@ -188,6 +188,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - net-nds/openldap
   - net-misc/netkit-telnetd
   - sys-apps/dbus
+  - sys-cluster/k9scli
   - sys-cluster/kubeadm
   - sys-cluster/kubelet
   - sys-cluster/kubectl
