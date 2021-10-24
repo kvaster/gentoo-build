@@ -172,7 +172,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - dev-java/openjdk:16
   - dev-java/openjdk-bin:8
   - dev-java/openjdk-bin:11
-  - dev-java/openjdk-bin:16
+  - dev-java/openjdk-bin:17
   - dev-vcs/mercurial
   - dev-vcs/subversion
   - mail-mta/exim
