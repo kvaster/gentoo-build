@@ -427,16 +427,16 @@ class Builder
         'env-update'
       ]
 
-      puts 'Updating portage'
-      chrun [
-        'emerge -q1u portage'
-      ]
-
       puts 'Updating gcc'
       chrun [
         'emerge -q1u gcc binutils glibc',
         'emerge -q --prune gcc binutils glibc',
         'env-update'
+      ]
+
+      puts 'Updating portage'
+      chrun [
+        'emerge -q1u portage'
       ]
 
       puts 'Updating system'
