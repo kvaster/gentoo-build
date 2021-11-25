@@ -337,7 +337,7 @@ class Builder
       chrun [
         "make -j#{CORES}",
         'make modules_install',
-        @cfg['kernel_dtbs'] ? 'make dtbs_install' : [],
+        @cfg['kernel_dtbs'] ? 'DTC_FLAGS="-@" make dtbs && make dtbs_install' : [],
         'make install',
       ], '/usr/src/linux'
 
