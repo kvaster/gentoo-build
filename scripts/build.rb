@@ -335,6 +335,7 @@ class Builder
       end
 
       chrun [
+        "make -j#{CORES} olddefconfig"
         "make -j#{CORES}",
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'DTC_FLAGS="-@" make dtbs && make dtbs_install' : [],
