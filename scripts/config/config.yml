@@ -161,7 +161,7 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-crypt/certbot
   - app-crypt/certbot-dns-rfc2136
   - app-emulation/cri-tools
-  - app-emulation/containerd
+  - app-containers/containerd
   - app-metrics/alertmanager
   - app-metrics/prometheus
   - app-metrics/VictoriaMetrics
