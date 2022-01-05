@@ -160,8 +160,8 @@ pkgs_all_amd64: &pkgs_all_amd64
   - app-arch/pixz
   - app-crypt/certbot
   - app-crypt/certbot-dns-rfc2136
-  - app-emulation/cri-tools
   - app-containers/containerd
+  - app-containers/cri-tools
   - app-metrics/alertmanager
   - app-metrics/prometheus
   - app-metrics/VictoriaMetrics
