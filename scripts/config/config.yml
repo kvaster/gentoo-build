@@ -196,6 +196,5 @@ pkgs_all_amd64: &pkgs_all_amd64
   - sys-cluster/kubelet
   - sys-cluster/kubectl
   - sys-cluster/keepalived
-  - sys-cluster/lizardfs
   - sys-libs/freeipmi
   - www-apps/grafana
