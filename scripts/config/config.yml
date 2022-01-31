@@ -133,6 +133,7 @@ pkgs_all_common: &pkgs_all_common
   - app-metrics/blackbox_exporter
   - app-metrics/node_exporter
   - app-metrics/nut_exporter
+  - app-misc/jq
   - app-misc/mosquitto
   - app-portage/layman
   - app-shells/fzf
