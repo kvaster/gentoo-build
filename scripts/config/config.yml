@@ -146,6 +146,7 @@ pkgs_all_common: &pkgs_all_common
   - net-misc/dhcpcd
   - net-vpn/wireguard-tools
   - sys-apps/ethtool
+  - sys-apps/lshw
   - sys-apps/yarn
   - www-servers/nginx
 
