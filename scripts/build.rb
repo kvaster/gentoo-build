@@ -610,7 +610,7 @@ class ErbContext
   def gen(fn, h = {})
     e = ""
     File.open(fn) do |f|
-      e = ERB.new(f.read, nil, "-")
+      e = ERB.new(f.read, trim_mode: "-")
     end
     ec = ErbContext.new(@props.merge(h))
     e.result(ec.get_binding)
@@ -702,10 +702,10 @@ if action == 'sync'
   args = []
 end
 
-cfg = YAML.load(File.new(File.join(CONF_DIR, 'config.yml')))
+cfg = YAML.unsafe_load(File.new(File.join(CONF_DIR, 'config.yml')))
 
 if File.exist?('config.user.yml')
-  cfg.merge!(YAML.load(File.new('config.user.yml')))
+  cfg.merge!(YAML.unsafe_load(File.new('config.user.yml')))
 end
 
 def check_args(args)
