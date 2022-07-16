@@ -443,7 +443,7 @@ class Builder
       puts 'Updating system'
       chrun [
         'emerge -qe @system --keep-going --with-bdeps=y',
-        'emerge -qDuN @world --keep-going --with-bdeps=y'
+        'emerge -qDuN @world --keep-going --with-bdeps=y',
         'emerge -q --depclean',
         'etc-update --automode -5',
         'eselect news read',
