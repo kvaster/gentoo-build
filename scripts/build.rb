@@ -431,7 +431,7 @@ class Builder
       puts 'Updating gcc'
       chrun [
         'emerge -q1u gcc binutils glibc',
-        'emerge -q --prune gcc binutils glibc',
+        'emerge -q --prune gcc binutils glibc || [[ $? == 1 ]]', # ignore exit code 1 -> nothing to emerge
         'env-update'
       ]
 
