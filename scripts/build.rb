@@ -93,12 +93,12 @@ class Builder
     raise "no arch found: #{arch}" unless cfg['archs'].has_key?(arch)
     cfg = cfg.merge(cfg['archs'][arch])
     cfg['arch'] = arch
-    cfg['cores'] = CORES
 
     @cfg = cfg
     @arch = cfg['arch']
     @gentoo = File.join(BUILD_DIR, @arch)
     @repo = cfg['repository']
+    @cores = cfg['cores']
   end
 
   def drop_package(name)
@@ -335,8 +335,8 @@ class Builder
       end
 
       chrun [
-        "make -j#{CORES} olddefconfig",
-        "make -j#{CORES}",
+        "make -j#{@cores} olddefconfig",
+        "make -j#{@cores}",
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'DTC_FLAGS="-@" make dtbs && make dtbs_install' : [],
         'make install',
@@ -657,6 +657,7 @@ build_dir = '../build-tmp'
 arch = nil
 apply = false
 phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
+cores = Etc.nprocessors
 
 args = ARGV.clone
 
@@ -677,6 +678,10 @@ opts = OptionParser.new do |opts|
     |p| phases = p.split(',').map { |ph| ph.to_sym }
   end
 
+  opts.on('-C', '--cores N', 'Use maximum N cores during build') do
+    |n| cores = n.to_i
+  end
+
   opts.on('-h', '--help', 'Print this help') do
     puts opts
     exit(1)
@@ -692,7 +697,6 @@ end
 
 BUILD_DIR = build_dir
 CONF_DIR = config_dir
-CORES = Etc.nprocessors
 
 action = args.shift
 
@@ -703,6 +707,7 @@ if action == 'sync'
 end
 
 cfg = YAML.unsafe_load(File.new(File.join(CONF_DIR, 'config.yml')))
+cfg['cores'] = cores
 
 if File.exist?('config.user.yml')
   cfg.merge!(YAML.unsafe_load(File.new('config.user.yml')))
