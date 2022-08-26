@@ -1,1 +1,2 @@
 app-metrics/node_exporter * ~*
+app-metrics/blackbox_exporter * ~*
