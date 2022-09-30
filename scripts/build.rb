@@ -240,6 +240,9 @@ class Builder
   end
 
   def kernel_version
+      version = @cfg['kernel_force_version']
+      return version unless version.nil?
+
       version = do_chroot do
         `emerge -qp "=gentoo-sources-#{@cfg['kernel']}*"`
       end
@@ -306,8 +309,9 @@ class Builder
       kver = "#{m[1]}#{m[2]}"
       raise "version mismatch: #{version} / #{kver}" unless version == kver
 
-      kernel = "kernel-#{@cfg['os_arch']}-#{@cfg['kernel']}.config"
-      FileUtils.cp(conf_path('kernel', kernel), File.join(@gentoo, 'usr/src/linux/.config'))
+      kernel = @cfg['kernel_force_config']
+      kernel = conf_path('kernel', "kernel-#{@cfg['os_arch']}-#{@cfg['kernel']}.config") if kernel.nil?
+      FileUtils.cp(kernel, File.join(@gentoo, 'usr/src/linux/.config'))
 
       kernel_config = @cfg['kernel_config']
       unless kernel_config.nil?
@@ -659,6 +663,9 @@ apply = false
 phases = [:init, :stage3, :kernel, :stage4, :binpkgs]
 cores = Etc.nprocessors
 
+kernel_force_version = nil
+kernel_force_config = nil
+
 args = ARGV.clone
 
 opts = OptionParser.new do |opts|
@@ -669,6 +676,10 @@ opts = OptionParser.new do |opts|
   opts.on('-a', '--arch ARCH', 'List of arches to build or all') { |a| arch = a }
 
   opts.on('-A', '--apply', 'Apply changes after building all archs') { |a| apply = a }
+
+  opts.on('-V', '--kernel-version KERNEL_VERSION', 'Force kernel version') { |v| kernel_force_version = v }
+
+  opts.on('-K', '--kernel-config KERNEL_CONFIG', 'Force kernel config') { |k| kernel_force_config = k }
 
   PHASES_HELP = "Build only theese phases." +
       " PHASES: init, stage3 (stage3_build, stage3_pack), kernel (kernel_init, kernel_build)," +
@@ -708,6 +719,8 @@ end
 
 cfg = YAML.unsafe_load(File.new(File.join(CONF_DIR, 'config.yml')))
 cfg['cores'] = cores
+cfg['kernel_force_version'] = kernel_force_version unless kernel_force_version.nil?
+cfg['kernel_force_config'] = kernel_force_config unless kernel_force_config.nil?
 
 if File.exist?('config.user.yml')
   cfg.merge!(YAML.unsafe_load(File.new('config.user.yml')))
