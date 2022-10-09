@@ -9,16 +9,16 @@ ruby: ruby31
 
 groups:
   amd64:
-    - generic
-    - zen2
-    - core2
-    - broadwell
-    - sandybridge
-    - skylake
-    - goldmontplus
+  - generic
+  - zen2
+  - core2
+  - broadwell
+  - sandybridge
+  - skylake
+  - goldmontplus
   arm64:
-    - rpi
-    - rpi4
+  - rpi
+  - rpi4
 
 chost_amd64: &chost_amd64
   chost: x86_64-pc-linux-gnu
@@ -29,7 +29,7 @@ chost_amd64: &chost_amd64
   kernel: "6.0"
   initramfs: true
   kernel_build_pkgs:
-    - app-arch/zstd
+  - app-arch/zstd
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
@@ -41,7 +41,7 @@ chost_arm64: &chost_arm64
   kernel: "6.0"
   kernel_dtbs: true
   kernel_build_pkgs:
-    - app-arch/zstd
+  - app-arch/zstd
 
 archs:
   broadwell:
@@ -87,116 +87,116 @@ archs:
     cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a72
 
 pkgs_stage4_common: &pkgs_stage4_common
-  - app-admin/metalog
-  - app-admin/sudo
-  - app-admin/logrotate
-  - app-arch/p7zip
-  - app-editors/nano
-  - app-editors/vim
-  - app-misc/mc
-  - app-misc/tmux
-  - app-portage/gentoolkit
-  - dev-lang/ruby
-  - net-firewall/iptables
-  - net-firewall/nftables
-  - net-misc/ntp
-  - net-wireless/bluez
-  - net-wireless/hostapd
-  - net-wireless/iw
-  - net-wireless/wpa_supplicant
-  - sys-apps/gptfdisk
-  - sys-apps/iproute2
-  - sys-apps/pciutils
-  - sys-apps/usbutils
-  - sys-fs/btrfs-progs
-  - sys-fs/compsize
-  - sys-fs/dosfstools
-  - sys-kernel/linux-firmware
-  - sys-power/acpi
-  - sys-power/acpid
-  - sys-process/cronie
+- app-admin/metalog
+- app-admin/sudo
+- app-admin/logrotate
+- app-arch/p7zip
+- app-editors/nano
+- app-editors/vim
+- app-misc/mc
+- app-misc/tmux
+- app-portage/gentoolkit
+- dev-lang/ruby
+- net-firewall/iptables
+- net-firewall/nftables
+- net-misc/ntp
+- net-wireless/bluez
+- net-wireless/hostapd
+- net-wireless/iw
+- net-wireless/wpa_supplicant
+- sys-apps/gptfdisk
+- sys-apps/iproute2
+- sys-apps/pciutils
+- sys-apps/usbutils
+- sys-fs/btrfs-progs
+- sys-fs/compsize
+- sys-fs/dosfstools
+- sys-kernel/linux-firmware
+- sys-power/acpi
+- sys-power/acpid
+- sys-process/cronie
 
 pkgs_stage4_arm64: &pkgs_stage4_arm64
-  - *pkgs_stage4_common
-  - dev-embedded/rpi-eeprom
+- *pkgs_stage4_common
+- dev-embedded/rpi-eeprom
 
 pkgs_stage4_amd64: &pkgs_stage4_amd64
-  - *pkgs_stage4_common
-  - sys-apps/ipmitool
-  - sys-boot/grub
-  - sys-firmware/intel-microcode
-  - sys-fs/mdadm
-  - sys-kernel/genkernel
+- *pkgs_stage4_common
+- sys-apps/ipmitool
+- sys-boot/grub
+- sys-firmware/intel-microcode
+- sys-fs/mdadm
+- sys-kernel/genkernel
 
 pkgs_all_common: &pkgs_all_common
-  - *pkgs_stage4_common
-  - app-metrics/blackbox_exporter
-  - app-metrics/node_exporter
-  - app-metrics/nut_exporter
-  - app-misc/jq
-  - app-misc/mosquitto
-  - app-portage/layman
-  - app-shells/fzf
-  - dev-db/mongodb
-  - dev-db/postgresql
-  - net-dns/dnsmasq
-  - net-analyzer/tcpdump
-  - net-analyzer/traceroute
-  - net-libs/nodejs
-  - net-misc/dhcpcd
-  - net-vpn/wireguard-tools
-  - sys-apps/ethtool
-  - sys-apps/lshw
-  - sys-apps/yarn
-  - www-servers/nginx
+- *pkgs_stage4_common
+- app-metrics/blackbox_exporter
+- app-metrics/node_exporter
+- app-metrics/nut_exporter
+- app-misc/jq
+- app-misc/mosquitto
+- app-portage/layman
+- app-shells/fzf
+- dev-db/mongodb
+- dev-db/postgresql
+- net-dns/dnsmasq
+- net-analyzer/tcpdump
+- net-analyzer/traceroute
+- net-libs/nodejs
+- net-misc/dhcpcd
+- net-vpn/wireguard-tools
+- sys-apps/ethtool
+- sys-apps/lshw
+- sys-apps/yarn
+- www-servers/nginx
 
 pkgs_all_arm64: &pkgs_all_arm64
-  - *pkgs_all_common
-  - *pkgs_stage4_arm64
-  - dev-util/ccache
+- *pkgs_all_common
+- *pkgs_stage4_arm64
+- dev-util/ccache
 
 pkgs_all_amd64: &pkgs_all_amd64
-  - *pkgs_all_common
-  - *pkgs_stage4_amd64
-  - app-admin/helm
-  - app-arch/pixz
-  - app-crypt/certbot
-  - app-crypt/certbot-dns-rfc2136
-  - app-containers/containerd
-  - app-containers/cri-tools
-  - app-metrics/alertmanager
-  - app-metrics/prometheus
-  - app-metrics/VictoriaMetrics
-  - app-portage/cpuid2cpuflags
-  - app-portage/smart-live-rebuild
-  - dev-java/nexus-oss-bin
-  - dev-java/openjdk:8
-  - dev-java/openjdk:11
-  - dev-java/openjdk:17
-  - dev-java/openjdk
-  - dev-java/openjdk-bin:8
-  - dev-java/openjdk-bin:11
-  - dev-java/openjdk-bin:17
-  - dev-java/openjdk-bin
-  - dev-vcs/mercurial
-  - dev-vcs/subversion
-  - mail-mta/exim
-  - media-video/ffmpeg
-  - net-dialup/ppp
-  - net-firewall/conntrack-tools
-  - net-firewall/ipset
-  - net-misc/miniupnpd
-  - net-misc/socat
-  - net-dns/bind-tools
-  - net-dns/knot
-  - net-dns/knot-resolver
-  - net-nds/openldap
-  - net-misc/netkit-telnetd
-  - sys-apps/dbus
-  - sys-cluster/k9scli
-  - sys-cluster/kubeadm
-  - sys-cluster/kubelet
-  - sys-cluster/kubectl
-  - sys-cluster/keepalived
-  - sys-libs/freeipmi
-  - www-apps/grafana
+- *pkgs_all_common
+- *pkgs_stage4_amd64
+- app-admin/helm
+- app-arch/pixz
+- app-crypt/certbot
+- app-crypt/certbot-dns-rfc2136
+- app-containers/containerd
+- app-containers/cri-tools
+- app-metrics/alertmanager
+- app-metrics/prometheus
+- app-metrics/VictoriaMetrics
+- app-portage/cpuid2cpuflags
+- app-portage/smart-live-rebuild
+- dev-java/nexus-oss-bin
+- dev-java/openjdk:8
+- dev-java/openjdk:11
+- dev-java/openjdk:17
+- dev-java/openjdk
+- dev-java/openjdk-bin:8
+- dev-java/openjdk-bin:11
+- dev-java/openjdk-bin:17
+- dev-java/openjdk-bin
+- dev-vcs/mercurial
+- dev-vcs/subversion
+- mail-mta/exim
+- media-video/ffmpeg
+- net-dialup/ppp
+- net-firewall/conntrack-tools
+- net-firewall/ipset
+- net-misc/miniupnpd
+- net-misc/socat
+- net-dns/bind-tools
+- net-dns/knot
+- net-dns/knot-resolver
+- net-nds/openldap
+- net-misc/netkit-telnetd
+- sys-apps/dbus
+- sys-cluster/k9scli
+- sys-cluster/kubeadm
+- sys-cluster/kubelet
+- sys-cluster/kubectl
+- sys-cluster/keepalived
+- sys-libs/freeipmi
+- www-apps/grafana
