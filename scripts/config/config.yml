@@ -140,6 +140,7 @@ pkgs_all_common: &pkgs_all_common
 - dev-db/mongodb
 - dev-db/postgresql
 - net-dns/dnsmasq
+- net-analyzer/nmap
 - net-analyzer/tcpdump
 - net-analyzer/traceroute
 - net-libs/nodejs
