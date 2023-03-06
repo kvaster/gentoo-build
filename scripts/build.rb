@@ -425,9 +425,13 @@ class Builder
 
   def build_stage3
     mounted do
+      repos = ['gentoo', @cfg['kernel'] ? 'kernel' : [], @cfg['repository_overlays'] || []].flatten
+      repos = repos.map! { |r| "/var/db/repos/#{r}" }.join(' ')
+
       puts 'Updating portage tree'
       chrun [
         'env-update',
+        "mkdir -p #{repos}", # dirty hack casue of new emerge bug
         'emerge -q --sync',
         'env-update'
       ]
