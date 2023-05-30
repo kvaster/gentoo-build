@@ -100,8 +100,6 @@ pkgs_stage4_common: &pkgs_stage4_common
 - net-firewall/iptables
 - net-firewall/nftables
 - net-misc/ntp
-- net-wireless/bluez
-- net-wireless/hostapd
 - net-wireless/iw
 - net-wireless/wpa_supplicant
 - sys-apps/gptfdisk
@@ -146,7 +144,10 @@ pkgs_all_common: &pkgs_all_common
 - net-libs/nodejs
 - net-misc/dhcpcd
 - net-vpn/wireguard-tools
+- net-wireless/bluez
+- net-wireless/hostapd
 - sys-apps/ethtool
+- sys-apps/kexec-tools
 - sys-apps/lshw
 - sys-apps/yarn
 - www-servers/nginx
