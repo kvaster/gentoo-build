@@ -128,13 +128,12 @@ pkgs_stage4_amd64: &pkgs_stage4_amd64
 
 pkgs_all_common: &pkgs_all_common
 - *pkgs_stage4_common
-- add-admin/rasdaemon
+- app-admin/rasdaemon
 - app-metrics/blackbox_exporter
 - app-metrics/node_exporter
 - app-metrics/nut_exporter
 - app-misc/jq
 - app-misc/mosquitto
-- app-portage/layman
 - app-shells/fzf
 - dev-db/mongodb
 - dev-db/postgresql
