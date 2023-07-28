@@ -191,7 +191,7 @@ pkgs_all_amd64: &pkgs_all_amd64
 - net-misc/socat
 - net-dns/bind-tools
 - net-dns/knot
-- net-dns/knot-resolver
+- net-dns/knot-resolver::kvaster
 - net-nds/openldap
 - net-misc/netkit-telnetd
 - sys-apps/dbus
