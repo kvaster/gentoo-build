@@ -26,7 +26,7 @@ chost_amd64: &chost_amd64
   profile: default/linux/amd64/17.1
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
-  kernel: "6.5"
+  kernel: "6.6"
   initramfs: true
   kernel_build_pkgs:
   - app-arch/zstd
@@ -38,7 +38,7 @@ chost_arm64: &chost_arm64
   profile: default/linux/arm64/17.0
   pkgs_stage4: pkgs_stage4_arm64
   pkgs_all: pkgs_all_arm64
-  kernel: "6.5"
+  kernel: "6.6"
   kernel_dtbs: true
   kernel_build_pkgs:
   - app-arch/zstd
