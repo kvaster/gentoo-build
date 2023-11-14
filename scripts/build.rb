@@ -572,7 +572,7 @@ class Builder
     FileUtils.rm_rf @gentoo
   end
 
-  def chrun(cmds, dir = '/')
+  def chrun(cmds, dir = '/root')
     cmds = [cmds].flatten
     do_chroot(dir) do
       run(cmds)
@@ -583,7 +583,7 @@ class Builder
     File.join(CONF_DIR, args)
   end
 
-  def do_chroot(dir = '/')
+  def do_chroot(dir = '/root')
     do_forked do
       Dir.chroot(@gentoo)
       Dir.chdir(dir)
