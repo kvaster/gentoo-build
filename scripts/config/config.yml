@@ -116,7 +116,6 @@ pkgs_stage4_common: &pkgs_stage4_common
 
 pkgs_stage4_arm64: &pkgs_stage4_arm64
 - *pkgs_stage4_common
-- dev-embedded/rpi-eeprom
 
 pkgs_stage4_amd64: &pkgs_stage4_amd64
 - *pkgs_stage4_common
