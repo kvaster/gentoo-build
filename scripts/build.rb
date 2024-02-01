@@ -244,7 +244,7 @@ class Builder
       return version unless version.nil?
 
       version = do_chroot do
-        `emerge -qp "=gentoo-sources-#{@cfg['kernel']}*"`
+        `emerge -p "=gentoo-sources-#{@cfg['kernel']}*"`
       end
 
       m = /gentoo-sources-([^ ]+)/.match(version)
@@ -270,7 +270,7 @@ class Builder
     pkgs = @cfg['kernel_build_pkgs']
     unless pkgs.nil?
       mounted do
-        chrun "emerge -q1u #{pkgs.join(' ')}"
+        chrun "emerge -1u #{pkgs.join(' ')}"
       end
     end
     kernel_builder.kernel_init_impl
@@ -300,7 +300,7 @@ class Builder
       m = /([^-]+)(-r.*)?/.match(version)
       kver_l = "#{m[1]}-gentoo#{m[2] || ''}"
 
-      chrun(%{emerge -q1u "=gentoo-sources-#{version}"})
+      chrun(%{emerge -1u "=gentoo-sources-#{version}"})
       chrun("eselect kernel set linux-#{kver_l}")
 
       kver = File.basename(File.readlink(File.join(@gentoo, 'usr/src/linux')))
@@ -324,7 +324,7 @@ class Builder
 
       if initramfs
         version = do_chroot do
-          run('emerge -q1u sys-kernel/genkernel')
+          run('emerge -1u sys-kernel/genkernel')
           `genkernel --version`
         end.strip
 
@@ -349,7 +349,7 @@ class Builder
       if @cfg['kernel_pkgs']
         pkgs = @cfg['kernel_pkgs']
         pkgs = pkgs.flatten.uniq.join(' ') if pkgs.is_a?(Array)
-        chrun("emerge -q1 #{pkgs}")
+        chrun("emerge -1 #{pkgs}")
       end
 
       chrun('genkernel initramfs', '/usr/src/linux') if initramfs
@@ -399,9 +399,9 @@ class Builder
     mounted do
       chrun [
         'env-update',
-        'emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going || emerge -qDuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going',
-        'emerge -q @preserved-rebuild',
-        'emerge -q --depclean',
+        'emerge -DuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going || emerge -DuN @world --with-bdeps=y --changed-deps=y --complete-graph=y --keep-going',
+        'emerge @preserved-rebuild',
+        'emerge --depclean',
         'etc-update --automode -5',
         clean ? 'eclean packages' : [],
         'eselect news read'
@@ -432,34 +432,34 @@ class Builder
       chrun [
         'env-update',
         "mkdir -p #{repos}", # dirty hack casue of new emerge bug
-        'emerge -q --sync',
+        'emerge --sync',
         'env-update'
       ]
 
       puts 'Updating gcc'
       chrun [
-        'emerge -q1u gcc binutils glibc',
-        'emerge -q --prune gcc binutils glibc || [[ $? == 1 ]]', # ignore exit code 1 -> nothing to emerge
+        'emerge -1u gcc binutils glibc',
+        'emerge --prune gcc binutils glibc || [[ $? == 1 ]]', # ignore exit code 1 -> nothing to emerge
         'env-update'
       ]
 
       puts 'Updating portage'
       chrun [
-        'emerge -q1u portage'
+        'emerge -1u portage'
       ]
 
       puts 'Updating system'
       chrun [
-        'emerge -qe @system --keep-going --with-bdeps=y',
-        'emerge -qDuN @world --keep-going --with-bdeps=y',
-        'emerge -q --depclean',
+        'emerge -e @system --keep-going --with-bdeps=y',
+        'emerge -DuN @world --keep-going --with-bdeps=y',
+        'emerge --depclean',
         'etc-update --automode -5',
         'eselect news read',
       ]
 
       puts 'Cleanup stage3'
       chrun [
-        'emerge -q --depclean'
+        'emerge --depclean'
       ]
     end
   end
@@ -469,7 +469,7 @@ class Builder
 
     if @cfg['kernel']
       mounted do
-        chrun("FEATURES='-buildpkg' emerge -q sys-kernel/gentoo-#{@arch}-bin")
+        chrun("FEATURES='-buildpkg' emerge sys-kernel/gentoo-#{@arch}-bin")
       end
     end
   end
