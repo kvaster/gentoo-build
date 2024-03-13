@@ -30,6 +30,7 @@ chost_amd64: &chost_amd64
   initramfs: true
   kernel_build_pkgs:
   - app-arch/zstd
+  - sys-kernel/installkernel
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
@@ -42,6 +43,7 @@ chost_arm64: &chost_arm64
   kernel_dtbs: true
   kernel_build_pkgs:
   - app-arch/zstd
+  - sys-kernel/installkernel
 
 archs:
   generic:
