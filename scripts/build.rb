@@ -267,12 +267,6 @@ class Builder
   end
 
   def kernel_init
-    pkgs = @cfg['kernel_build_pkgs']
-    unless pkgs.nil?
-      mounted do
-        chrun "emerge -1u #{pkgs.join(' ')}"
-      end
-    end
     kernel_builder.kernel_init_impl
   end
 
@@ -290,6 +284,13 @@ class Builder
 
   def kernel_build_impl
     configure(true)
+
+    pkgs = @cfg['kernel_build_pkgs']
+    unless pkgs.nil?
+      mounted do
+        chrun "emerge -1u #{pkgs.join(' ')}"
+      end
+    end
 
     initramfs = @cfg['initramfs']
     FileUtils.cp(conf_path('kernel/genkernel.conf'), File.join(@gentoo, 'etc/genkernel.conf')) if initramfs
