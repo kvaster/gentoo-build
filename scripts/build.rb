@@ -329,6 +329,11 @@ class Builder
           `genkernel --version`
         end.strip
 
+        # TODO: special patch, please remove it when will be fixed upstream
+        binutils_patches = File.join(@gentoo, '/usr/share/genkernel/patches/busybox/1.36.1')
+        FileUtils.mkdir_p(binutils_patches)
+        FileUtils.cp(File.join(@gentoo, '/var/db/repos/gentoo/sys-apps/busybox/files/busybox-1.36.1-kernel-6.8.patch'), binutils_patches)
+
         cache = File.join(@repo, 'genkernel', @arch, version)
         if File.exist?(cache)
           puts "Found genkernel cache"
