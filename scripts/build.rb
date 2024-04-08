@@ -504,7 +504,7 @@ class Builder
 
     unless base == d_base
       puts "Fixing profile path from #{base} to #{d_base}"
-      FileUtils.ln_s("#{d_base}/profiles/#{profile}", pp, force: true)
+      FileUtils.ln_s("#{d_base}/profiles/#{d_profile}", pp, force: true)
     end
   end
 
