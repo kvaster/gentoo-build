@@ -6,8 +6,6 @@ FFLAGS="${COMMON_FLAGS}"
 
 MAKEOPTS="-j<%= cores %>"
 
-CHOST="<%= chost %>"
-
 FEATURES="getbinpkg parallel-fetch usersync parallel-install"
 FEATURES="${FEATURES} nodoc noinfo"
 <% if build -%>

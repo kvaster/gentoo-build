@@ -500,11 +500,38 @@ class Builder
       base, profile = get_profile(pp)
     end
 
-    raise "profile is not supported: #{profile}, probably need migration" unless profile == d_profile
+    # TODO check if we really CAN migrate to a new profile
 
-    unless base == d_base
-      puts "Fixing profile path from #{base} to #{d_base}"
-      FileUtils.ln_s("#{d_base}/profiles/#{d_profile}", pp, force: true)
+    # raise "profile is not supported: #{profile}, probably need migration" unless profile == d_profile
+
+    unless profile == d_profile
+      puts "Migrating profile to #{d_base}/profiles/#{d_profile}"
+
+      FileUtils.rm(pp)
+      FileUtils.ln_s("#{d_base}/profiles/#{d_profile}/split-usr", pp, force: true)
+
+      mounted do
+        chrun [
+          'env-update',
+          'emerge --sync',
+          'env-update'
+        ]
+
+        chrun [
+          'emerge -1u merge-usr',
+          'merge-usr',
+          "eselect profile set #{d_profile}",
+          'emerge -1 sys-devel/binutils',
+          'emerge -1 sys-devel/gcc --nodeps',
+          'emerge -1 sys-libs/glibc',
+          'emerge -1 libtool'
+        ]
+      end
+    else
+      unless base == d_base
+        puts "Fixing profile path from #{base} to #{d_base}"
+        FileUtils.ln_s("#{d_base}/profiles/#{d_profile}", pp, force: true)
+      end
     end
   end
 
