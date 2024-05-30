@@ -591,8 +591,8 @@ class Builder
   def mount
     run [
       "mount -t proc none #{@gentoo}/proc",
-      "mount --rbind /dev #{@gentoo}/dev",
-      "mount --rbind /sys #{@gentoo}/sys"
+      "mount --make-rslave --rbind /dev #{@gentoo}/dev",
+      "mount --make-rslave --rbind /sys #{@gentoo}/sys"
     ]
   end
 
