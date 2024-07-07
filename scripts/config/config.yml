@@ -122,6 +122,7 @@ pkgs_stage4_arm64: &pkgs_stage4_arm64
 pkgs_stage4_amd64: &pkgs_stage4_amd64
 - *pkgs_stage4_common
 - sys-apps/ipmitool
+- sys-apps/nvme-cli
 - sys-boot/grub
 - sys-firmware/intel-microcode
 - sys-fs/mdadm
