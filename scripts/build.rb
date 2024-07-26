@@ -311,7 +311,7 @@ class Builder
       raise "version mismatch: #{version} / #{kver}" unless version == kver
 
       kernel = @cfg['kernel_force_config']
-      kernel = conf_path('kernel', "kernel-#{@cfg['os_arch']}-#{@cfg['kernel']}.config") if kernel.nil?
+      kernel = conf_path('kernel', "kernel-#{@cfg['os_arch']}.config") if kernel.nil?
       FileUtils.cp(kernel, File.join(@gentoo, 'usr/src/linux/.config'))
 
       kernel_config = @cfg['kernel_config']
@@ -571,6 +571,13 @@ class Builder
       raise "qemu user not found: #{qemu}" unless File.exist?(qemu)
       FileUtils.cp(qemu, "#{@gentoo}#{qemu}")
     end
+
+    # TODO: remove after migration
+    # patch portage globals
+    globals = File.join(@gentoo, '/usr/share/portage/config/make.globals')
+    run("sed -i '/^BINPKG_COMPRESS=/c\BINPKG_COMPRESS=\"zstd\"' #{globals}")
+    run("sed -i '/^BINPKG_FORMAT=/c\BINPKG_FORMAT=\"gpkg\"' #{globals}")
+    run("sed -i '/^FEATURES=.*-binpkg-multi-instance/d' #{globals}")
   end
 
   def configure(for_build)
