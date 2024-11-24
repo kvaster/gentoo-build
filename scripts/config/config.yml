@@ -26,7 +26,7 @@ chost_amd64: &chost_amd64
   profile: default/linux/amd64/23.0
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
-  kernel: "6.11"
+  kernel: "6.12"
   initramfs: true
   kernel_build_pkgs:
   - app-arch/zstd
@@ -39,7 +39,7 @@ chost_arm64: &chost_arm64
   profile: default/linux/arm64/23.0
   pkgs_stage4: pkgs_stage4_arm64
   pkgs_all: pkgs_all_arm64
-  kernel: "6.11"
+  kernel: "6.12"
   kernel_dtbs: true
   kernel_build_pkgs:
   - app-arch/zstd
@@ -51,36 +51,43 @@ archs:
     cflags: -O3 -pipe
     x86flags: ''
     kernel_config: GENERIC_CPU
+    compiler_isa_level: 1
   core2:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=core2 -mtune=core2
     x86flags: mmx mmxext sse sse2 sse3 ssse3
     kernel_config: MCORE2
+    compiler_isa_level: 2
   zen2:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=znver2 -mtune=znver2
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3
     kernel_config: MZEN2
+    compiler_isa_level: 3
   goldmontplus:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=goldmont-plus -mtune=goldmont-plus
     x86flags: aes mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 ssse3
     kernel_config: MGOLDMONTPLUS
+    compiler_isa_level: 2
   broadwell:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=broadwell -mtune=broadwell -mabm -mrtm -maes
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
     kernel_config: MBROADWELL
+    compiler_isa_level: 3
   sandybridge:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=sandybridge -mtune=sandybridge
     x86flags: aes avx mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
     kernel_config: MSANDYBRIDGE
+    compiler_isa_level: 2
   skylake:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=skylake -mtune=skylake -mabm
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
     kernel_config: MSKYLAKE
+    compiler_isa_level: 3
   rpi:
     <<: *chost_arm64
     cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a53

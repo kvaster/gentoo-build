@@ -323,6 +323,13 @@ class Builder
         ], '/usr/src/linux'
       end
 
+      compiler_isa_level = @cfg['compiler_isa_level']
+      unless compiler_isa_level.nil?
+        chrun [
+          "scripts/config --set-val X86_64_VERSION #{compiler_isa_level}",
+        ], '/usr/src/linux'
+      end
+
       if initramfs
         version = do_chroot do
           run('emerge -1u sys-kernel/genkernel')
