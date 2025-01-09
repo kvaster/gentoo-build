@@ -5,7 +5,7 @@ repository: /var/lib/gentoo-build
 #repository_domain: gentoo.somedomain.com
 repository_overlays: [ kvaster ]
 
-ruby: ruby33
+ruby: ruby34
 
 groups:
   amd64:
