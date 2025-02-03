@@ -86,13 +86,5 @@ media-video/ffmpeg gmp libass fribidi libdrm zvbi truetype fontconfig vdpau
 # openldap
 net-nds/openldap overlays sha2
 
-# TODO: probably it's time to remove this
-# Somehow without this clang is forced to abi_x86_32
-sys-libs/compiler-rt-sanitizers -abi_x86_32
-sys-devel/clang-runtime -abi_x86_32
-sys-libs/compiler-rt -abi_x86_32
-sys-libs/libomp -abi_x86_32
-
 # mongodb
 sys-devel/binutils gold
-

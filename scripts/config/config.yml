@@ -146,6 +146,8 @@ pkgs_all_common: &pkgs_all_common
 - app-shells/fzf
 - dev-db/mongodb
 - dev-db/postgresql
+- dev-lang/rust
+- llvm-core/clang
 - net-dns/dnsmasq
 - net-analyzer/nmap
 - net-analyzer/tcpdump
@@ -159,7 +161,6 @@ pkgs_all_common: &pkgs_all_common
 - sys-apps/kexec-tools
 - sys-apps/lshw
 - sys-apps/yarn
-- sys-devel/clang
 - www-servers/nginx
 
 pkgs_all_arm64: &pkgs_all_arm64

@@ -25,6 +25,7 @@ VIDEO_CARDS="iris"
 
 USE="custom-optimization device-mapper"
 USE="${USE} lto pgo"
+USE="${USE} -abi_x86_32"
 <% unless x86flags.nil? -%>
 CPU_FLAGS_X86="<%= x86flags %>"
 <% end -%>
