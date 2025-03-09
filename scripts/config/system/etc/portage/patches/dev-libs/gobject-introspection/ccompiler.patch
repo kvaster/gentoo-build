@@ -1,0 +1,12 @@
+diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py
+index 2f03fd8..316fec6 100644
+--- a/giscanner/ccompiler.py
++++ b/giscanner/ccompiler.py
+@@ -25,6 +25,7 @@ import tempfile
+ 
+ import sys
+ import distutils
++from distutils import ccompiler
+ 
+ from distutils.unixccompiler import UnixCCompiler
+ from distutils.cygwinccompiler import Mingw32CCompiler
