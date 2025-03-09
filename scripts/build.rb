@@ -5,6 +5,8 @@ require 'optparse'
 require 'fileutils'
 require 'erb'
 require 'etc'
+require 'net/http'
+require 'uri'
 
 COMPRESSION=19
 
@@ -99,10 +101,20 @@ class Builder
     @gentoo = File.join(BUILD_DIR, @arch)
     @repo = cfg['repository']
     @cores = cfg['cores']
+
+    @notify = cfg['notify']
+  end
+
+  def notify(msg)
+    puts(msg)
+    if @notify
+      uri = URI("https://api.telegram.org/bot#{@cfg['telegram_api_token']}/sendMessage")
+      Net::HTTP.post_form(uri, 'chat_id' => @cfg['telegram_chat_id'], 'text': "*[#{@arch}]* #{msg}", 'parse_mode': 'Markdown')
+    end
   end
 
   def drop_package(name)
-    puts "Dropping binary packages for #{@arch}"
+    notify "Dropping binary packages"
 
     dst = "#{@repo}/packages/#{@arch}"
 
@@ -115,7 +127,7 @@ class Builder
   end
 
   def exec(cmd)
-    puts "Executing action for #{@arch}"
+    notify "Executing action"
 
     mounted do
       chrun(cmd)
@@ -123,7 +135,7 @@ class Builder
   end
 
   def apply
-    puts "Applying tarball and binary packages for #{@arch}"
+    notify "Applying tarball and binary packages"
 
     ok = false
 
@@ -158,24 +170,33 @@ class Builder
     end
 
     if ok
-      puts 'Done'
+      notify "Done"
     else
-      puts 'Nothing to apply'
+      notify "Nothing to apply"
     end
   end
 
   def build(phases)
+    begin
+      build_safe(phases)
+    rescue => e
+      notify("Error during build")
+      raise
+    end
+  end
+
+  def build_safe(phases)
     if phases.include?(:init)
-      puts "Preparing - cleanup"
+      notify "Preparing - cleanup"
       cleanup
 
-      puts "Unpacking stage3 tarball"
+      notify "Unpacking stage3 tarball"
       unpack_tarball
 
-      puts "Configuring"
+      notify "Configuring"
       configure(true)
 
-      puts "Copying binary packages"
+      notify "Copying binary packages"
       copy_binpkgs
 
       check_profile
@@ -184,52 +205,52 @@ class Builder
     end
 
     if phases.include?(:stage3) || phases.include?(:stage3_build)
-      puts "Building stage3"
+      notify "Building stage3"
       build_stage3
     end
 
     if phases.include?(:stage3) || phases.include?(:stage3_pack)
-      puts "Creating stage3 tarball"
+      notify "Creating stage3 tarball"
       create_stage3
     end
 
     if @cfg['kernel']
       if phases.include?(:kernel)
-        puts "Checking if we need to build new kernel"
+        notify "Checking if we need to build new kernel"
         if kernel_check
-          puts "- latest kernel available"
+          notify "Latest kernel available"
         else
           phases += [:kernel_init, :kernel_build]
         end
       end
 
       if phases.include?(:kernel_init)
-        puts "Preparing kernel build environment"
+        notify "Preparing kernel build environment"
         kernel_init
       end
 
       if phases.include?(:kernel_build)
-        puts "Building kernel"
+        notify "Building kernel"
         kernel_build
       end
     end
 
     if phases.include?(:stage4) || phases.include?(:stage4_build)
-      puts "Building stage4"
+      notify "Building stage4"
       build_stage4
     end
 
     if phases.include?(:stage4) || phases.include?(:stage4_pack)
-      puts "Creating stage4 tarball"
+      notify "Creating stage4 tarball"
       create_stage4
     end
 
     if phases.include?(:binpkgs)
-      puts "Building other binary packages"
+      notify "Building other binary packages"
       build_world(@cfg[@cfg['pkgs_all']], true)
     end
 
-    puts "Finished"
+    notify "Finished"
   end
 
   def kernel_check
@@ -717,6 +738,8 @@ cores = Etc.nprocessors
 kernel_force_version = nil
 kernel_force_config = nil
 
+notify = false
+
 args = ARGV.clone
 
 opts = OptionParser.new do |opts|
@@ -731,6 +754,8 @@ opts = OptionParser.new do |opts|
   opts.on('-V', '--kernel-version KERNEL_VERSION', 'Force kernel version') { |v| kernel_force_version = v }
 
   opts.on('-K', '--kernel-config KERNEL_CONFIG', 'Force kernel config') { |k| kernel_force_config = k }
+
+  opts.on('-n', '--notify', 'Notify build steps via telegram') { |n| notify = n }
 
   PHASES_HELP = "Build only theese phases." +
       " PHASES: init, stage3 (stage3_build, stage3_pack), kernel (kernel_init, kernel_build)," +
@@ -772,6 +797,8 @@ cfg = YAML.unsafe_load(File.new(File.join(CONF_DIR, 'config.yml')))
 cfg['cores'] = cores
 cfg['kernel_force_version'] = kernel_force_version unless kernel_force_version.nil?
 cfg['kernel_force_config'] = kernel_force_config unless kernel_force_config.nil?
+
+cfg['notify'] = notify
 
 if File.exist?('config.user.yml')
   cfg.merge!(YAML.unsafe_load(File.new('config.user.yml')))
