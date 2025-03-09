@@ -174,7 +174,6 @@ pkgs_all_amd64: &pkgs_all_amd64
 - app-admin/helm
 - app-arch/pixz
 - app-crypt/certbot
-- app-crypt/certbot-dns-rfc2136
 - app-containers/containerd
 - app-containers/cri-tools
 - app-metrics/alertmanager
