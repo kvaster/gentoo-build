@@ -31,6 +31,9 @@ chost_amd64: &chost_amd64
   kernel_build_pkgs:
   - app-arch/zstd
   - sys-kernel/installkernel
+  # remove after kernel will become compatible with gcc 15
+  kernel_cflags: '-Wno-error=unterminated-string-initialization'
+  genkernel_cflags: '-Os -pipe -fomit-frame-pointer -Wno-error=unterminated-string-initialization'
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
@@ -44,6 +47,9 @@ chost_arm64: &chost_arm64
   kernel_build_pkgs:
   - app-arch/zstd
   - sys-kernel/installkernel
+  # remove after kernel will become compatible with gcc 15
+  kernel_cflags: '-Wno-error=unterminated-string-initialization -Wno-error=unused-function'
+  genkernel_cflags: '-Os -pipe -fomit-frame-pointer -Wno-error=unterminated-string-initialization'
 
 archs:
   generic:

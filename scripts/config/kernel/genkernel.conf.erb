@@ -8,3 +8,7 @@ DISTDIR="${GK_SHARE}/distfiles"
 LOGFILE="/var/log/genkernel.log"
 LOGLEVEL=1
 DEFAULT_KERNEL_SOURCE="/usr/src/linux"
+
+<% unless genkernel_cflags.nil? -%>
+UTILS_CFLAGS="<%= genkernel_cflags %>"
+<% end -%>

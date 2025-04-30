@@ -314,7 +314,7 @@ class Builder
     end
 
     initramfs = @cfg['initramfs']
-    FileUtils.cp(conf_path('kernel/genkernel.conf'), File.join(@gentoo, 'etc/genkernel.conf')) if initramfs
+    write_template(conf_path('kernel/genkernel.conf.erb'), File.join(@gentoo, 'etc/genkernel.conf'), @cfg) if initramfs
 
     mounted do
       version = kernel_version
@@ -372,9 +372,12 @@ class Builder
         end
       end
 
+      kernel_cflags = @cfg['kernel_cflags']
+      kernel_cflags = kernel_cflags.nil? ? '' : "KCFLAGS='#{kernel_cflags}'"
+
       chrun [
         "make -j#{@cores} olddefconfig",
-        "make -j#{@cores}",
+        "make #{kernel_cflags} -j#{@cores}",
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'DTC_FLAGS="-@" make dtbs && make dtbs_install' : [],
         'make install',
