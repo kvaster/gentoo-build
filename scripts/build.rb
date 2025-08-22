@@ -335,22 +335,6 @@ class Builder
       kernel = conf_path('kernel', "kernel-#{@cfg['os_arch']}.config") if kernel.nil?
       FileUtils.cp(kernel, File.join(@gentoo, 'usr/src/linux/.config'))
 
-      kernel_config = @cfg['kernel_config']
-      unless kernel_config.nil?
-        chrun [
-          'scripts/config -d CONFIG_GENERIC_CPU',
-          'scripts/config -d CONFIG_MNATIVE',
-          "scripts/config -e CONFIG_#{kernel_config}"
-        ], '/usr/src/linux'
-      end
-
-      compiler_isa_level = @cfg['compiler_isa_level']
-      unless compiler_isa_level.nil?
-        chrun [
-          "scripts/config --set-val X86_64_VERSION #{compiler_isa_level}",
-        ], '/usr/src/linux'
-      end
-
       if initramfs
         version = do_chroot do
           run('emerge -1u sys-kernel/genkernel')
@@ -372,12 +356,19 @@ class Builder
         end
       end
 
+      make_flags = [ "-j#{@cores}" ]
+
       kernel_cflags = @cfg['kernel_cflags']
-      kernel_cflags = kernel_cflags.nil? ? '' : "KCFLAGS='#{kernel_cflags}'"
+      make_flags << "KCFLAGS='#{kernel_cflags}'" unless kernel_cflags.nil?
+
+      kernel_rustflags = @cfg['kernel_rustflags']
+      make_flags << "KRUSTFLAGS='#{kernel_rustflags}'" unless kernel_rustflags.nil?
+
+      make_flags = make_flags.join(' ')
 
       chrun [
         "make -j#{@cores} olddefconfig",
-        "make #{kernel_cflags} -j#{@cores}",
+        "make #{make_flags}",
         'make modules_install',
         @cfg['kernel_dtbs'] ? 'DTC_FLAGS="-@" make dtbs && make dtbs_install' : [],
         'make install',

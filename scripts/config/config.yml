@@ -31,9 +31,6 @@ chost_amd64: &chost_amd64
   kernel_build_pkgs:
   - app-arch/zstd
   - sys-kernel/installkernel
-  # remove after kernel will become compatible with gcc 15
-  #kernel_cflags: '-Wno-error=unterminated-string-initialization'
-  #genkernel_cflags: '-Os -pipe -fomit-frame-pointer -Wno-error=unterminated-string-initialization'
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
@@ -47,53 +44,48 @@ chost_arm64: &chost_arm64
   kernel_build_pkgs:
   - app-arch/zstd
   - sys-kernel/installkernel
-  # remove after kernel will become compatible with gcc 15
-  #kernel_cflags: '-Wno-error=unterminated-string-initialization -Wno-error=unused-function'
-  #genkernel_cflags: '-Os -pipe -fomit-frame-pointer -Wno-error=unterminated-string-initialization'
 
 archs:
   generic:
     <<: *chost_amd64
     cflags: -O3 -pipe
     x86flags: ''
-    #kernel_config: GENERIC_CPU
-    #compiler_isa_level: 1
   core2:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=core2 -mtune=core2
     x86flags: mmx mmxext sse sse2 sse3 ssse3
-    #kernel_config: MCORE2
-    #compiler_isa_level: 2
+    kernel_cflags: -march=core2 -mtune=core2
+    kernel_rustflags: -C target-cpu=core2
   zen2:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=znver2 -mtune=znver2
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3
-    #kernel_config: MZEN2
-    #compiler_isa_level: 3
+    kernel_cflags: -march=znver2 -mtune=znver2
+    kernel_rustflags: -C target-cpu=znver2
   goldmontplus:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=goldmont-plus -mtune=goldmont-plus
     x86flags: aes mmx mmxext pclmul popcnt sha sse sse2 sse3 sse4_1 sse4_2 ssse3
-    #kernel_config: MGOLDMONTPLUS
-    #compiler_isa_level: 2
+    kernel_cflags: -march=goldmont-plus -mtune=goldmont-plus
+    kernel_rustflags: -C target-cpu=goldmont-plus
   broadwell:
     <<: *chost_amd64
-    cflags: -O3 -pipe -march=broadwell -mtune=broadwell -mabm -mrtm -maes
+    cflags: -O3 -pipe -march=broadwell -mtune=broadwell
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
-    #kernel_config: MBROADWELL
-    #compiler_isa_level: 3
+    kernel_cflags: -march=broadwell -mtune=broadwell
+    kernel_rustflags: -C target-cpu=broadwell
   sandybridge:
     <<: *chost_amd64
     cflags: -O3 -pipe -march=sandybridge -mtune=sandybridge
     x86flags: aes avx mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
-    #kernel_config: MSANDYBRIDGE
-    #compiler_isa_level: 2
+    kernel_cflags: -march=sandybridge -mtune=sandybridge
+    kernel_rustflags: -C target-cpu=sandybridge
   skylake:
     <<: *chost_amd64
-    cflags: -O3 -pipe -march=skylake -mtune=skylake -mabm
+    cflags: -O3 -pipe -march=skylake -mtune=skylake
     x86flags: aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt sse sse2 sse3 sse4_1 sse4_2 ssse3
-    #kernel_config: MSKYLAKE
-    #compiler_isa_level: 3
+    kernel_cflags: -march=skylake -mtune=skylake
+    kernel_rustflags: -C target-cpu=skylake
   rpi:
     <<: *chost_arm64
     cflags: -O3 -pipe -march=armv8-a+crc+simd -mtune=cortex-a53
