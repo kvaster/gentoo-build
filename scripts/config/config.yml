@@ -142,7 +142,6 @@ pkgs_all_common: &pkgs_all_common
 - app-misc/jq
 - app-misc/mosquitto
 - app-shells/fzf
-- dev-db/mongodb
 - dev-db/postgresql
 - dev-lang/go
 - dev-lang/rust
@@ -180,6 +179,7 @@ pkgs_all_amd64: &pkgs_all_amd64
 - app-metrics/VictoriaMetrics
 - app-portage/cpuid2cpuflags
 - app-portage/smart-live-rebuild
+- dev-db/mongodb
 - dev-java/nexus-oss-bin
 - dev-java/openjdk:21
 - dev-java/openjdk
