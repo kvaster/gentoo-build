@@ -108,7 +108,7 @@ pkgs_stage4_common: &pkgs_stage4_common
 - dev-lang/ruby
 - net-firewall/iptables
 - net-firewall/nftables
-- net-misc/ntp
+- net-misc/chrony
 - net-wireless/iw
 - net-wireless/wpa_supplicant
 - sys-apps/gptfdisk
