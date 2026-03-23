@@ -1,1 +1,6 @@
 MAKEOPTS="-j1"
+
+# For golang
+GOFLAGS="-p=1"
+GOMAXPROCS="1"
+
