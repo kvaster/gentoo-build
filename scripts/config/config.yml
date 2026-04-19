@@ -176,6 +176,8 @@ pkgs_all_amd64: &pkgs_all_amd64
 - app-crypt/certbot
 - app-containers/containerd
 - app-containers/cri-tools
+- app-containers/podman
+- app-containers/podman-compose
 - app-metrics/alertmanager
 - app-metrics/prometheus
 - app-metrics/VictoriaMetrics
