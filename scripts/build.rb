@@ -248,6 +248,8 @@ class Builder
     if phases.include?(:binpkgs)
       notify "Building other binary packages"
       build_world(@cfg[@cfg['pkgs_all']], true)
+      notify "Building custom binary packages"
+      build_custom(@cfg[@cfg['pkgs_custom']])
     end
 
     notify "Finished"
@@ -412,6 +414,17 @@ class Builder
     else
       mounted do
         chrun('/bin/bash', '/root')
+      end
+    end
+  end
+
+  def build_custom(pkgs)
+    unless pkgs.nil? || pkgs.size == 0
+      mounted do
+        chrun [
+          'env-update',
+          pkgs.map { |pkg| "USE='#{pkg['use']}' emerge -B1 --nodeps #{pkg['name']}" },
+        ]
       end
     end
   end
