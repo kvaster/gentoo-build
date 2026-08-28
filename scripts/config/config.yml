@@ -108,6 +108,7 @@ pkgs_stage4_common: &pkgs_stage4_common
 - app-misc/tmux
 - app-portage/gentoolkit
 - dev-lang/ruby
+- dev-util/pahole
 - net-firewall/iptables
 - net-firewall/nftables
 - net-misc/chrony
