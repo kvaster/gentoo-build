@@ -33,6 +33,7 @@ chost_amd64: &chost_amd64
   - app-arch/zstd
   - sys-kernel/installkernel
   - sys-libs/binutils-libs
+  - dev-util/pahole
 
 chost_arm64: &chost_arm64
   chost: aarch64-unknown-linux-gnu
