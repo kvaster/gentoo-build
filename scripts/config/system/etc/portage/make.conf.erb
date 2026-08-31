@@ -29,6 +29,9 @@ USE="${USE} -abi_x86_32"
 <% unless x86flags.nil? -%>
 CPU_FLAGS_X86="<%= x86flags %>"
 <% end -%>
+<% unless armflags.nil? -%>
+CPU_FLAGS_ARM="<%= armflags %>"
+<% end -%>
 
 <% unless ruby.nil? -%>
 RUBY_TARGETS="<%= ruby %>"
