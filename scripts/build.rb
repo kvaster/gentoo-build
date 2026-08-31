@@ -267,7 +267,7 @@ class Builder
       return version unless version.nil?
 
       version = do_chroot do
-        `emerge -p "=gentoo-sources-#{@cfg['kernel']}*"`
+        `emerge -p --usepkg=n --getbinpkg=n "=gentoo-sources-#{@cfg['kernel']}*"`
       end
 
       m = /gentoo-sources-([^ ]+)/.match(version)
@@ -606,13 +606,6 @@ class Builder
       raise "qemu user not found: #{qemu}" unless File.exist?(qemu)
       FileUtils.cp(qemu, "#{@gentoo}#{qemu}")
     end
-
-    # TODO: remove after migration
-    # patch portage globals
-    globals = File.join(@gentoo, '/usr/share/portage/config/make.globals')
-    run("sed -i '/^BINPKG_COMPRESS=/c\BINPKG_COMPRESS=\"zstd\"' #{globals}")
-    run("sed -i '/^BINPKG_FORMAT=/c\BINPKG_FORMAT=\"gpkg\"' #{globals}")
-    run("sed -i '/^FEATURES=.*-binpkg-multi-instance/d' #{globals}")
   end
 
   def configure(for_build)
