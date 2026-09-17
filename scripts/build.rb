@@ -249,7 +249,7 @@ class Builder
       notify "Building other binary packages"
       build_world(@cfg[@cfg['pkgs_all']], true)
       notify "Building custom binary packages"
-      build_custom(@cfg[@cfg['pkgs_custom']])
+      run_custom_cmds(@cfg[@cfg['custom_cmds']])
     end
 
     notify "Finished"
@@ -418,12 +418,12 @@ class Builder
     end
   end
 
-  def build_custom(pkgs)
-    unless pkgs.nil? || pkgs.size == 0
+  def run_custom_cmds(cmds)
+    unless cmds.nil? || cmds.size == 0
       mounted do
         chrun [
           'env-update',
-          pkgs.flatten.map { |pkg| "USE='#{pkg['use'] || ''}' emerge -#{pkg['install'] ? '' : 'B'}1 --nodeps #{pkg['name']}" },
+          cmds.flatten,
         ]
       end
     end

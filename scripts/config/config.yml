@@ -24,7 +24,7 @@ chost_amd64: &chost_amd64
   profile: default/linux/amd64/23.0
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
-  pkgs_custom: pkgs_custom_amd64
+  custom_cmds: custom_cmds_amd64
   kernel: "7.2"
   initramfs: true
   kernel_build_pkgs:
@@ -41,7 +41,7 @@ chost_arm64: &chost_arm64
   profile: default/linux/arm64/23.0
   pkgs_stage4: pkgs_stage4_arm64
   pkgs_all: pkgs_all_arm64
-  pkgs_custom: pkgs_custom_arm64
+  custom_cmds: custom_cmds_arm64
   kernel: "7.2"
   kernel_dtbs: true
   kernel_build_pkgs:
@@ -205,15 +205,15 @@ pkgs_all_amd64: &pkgs_all_amd64
 - sys-cluster/keepalived
 - sys-libs/freeipmi
 
-pkgs_custom_all: &pkgs_custom_all
-- name: net-firewall/nftables
-  use: -json
+custom_cmds_all: &custom_cmds_all
+- USE=-json emerge -B1 --nodeps net-firewall/nftables
 
-pkgs_custom_arm64: &pkgs_custom_arm64
-- *pkgs_custom_all
+custom_cmds_arm64: &custom_cmds_arm64
+- *custom_cmds_all
 
-pkgs_custom_amd64: &pkgs_custom_amd64
-- *pkgs_custom_all
-- name: net-libs/nodejs:0/22
-  install: true
-- name: www-apps/grafana
+custom_cmds_amd64: &custom_cmds_amd64
+- *custom_cmds_all
+# Use old nodejs to build grafana
+- emerge -1 net-libs/nodejs:0/22
+- emerge -1 www-apps/grafana
+- emerge -1 net-libs/nodejs
