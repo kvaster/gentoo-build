@@ -423,7 +423,7 @@ class Builder
       mounted do
         chrun [
           'env-update',
-          pkgs.map { |pkg| "USE='#{pkg['use']}' emerge -B1 --nodeps #{pkg['name']}" },
+          pkgs.flatten.map { |pkg| "USE='#{pkg['use'] || ''}' emerge -#{pkg['install'] ? '' : 'B'}1 --nodeps #{pkg['name']}" },
         ]
       end
     end

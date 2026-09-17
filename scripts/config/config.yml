@@ -24,7 +24,7 @@ chost_amd64: &chost_amd64
   profile: default/linux/amd64/23.0
   pkgs_stage4: pkgs_stage4_amd64
   pkgs_all: pkgs_all_amd64
-  pkgs_custom: pkgs_custom_all
+  pkgs_custom: pkgs_custom_amd64
   kernel: "7.2"
   initramfs: true
   kernel_build_pkgs:
@@ -41,7 +41,7 @@ chost_arm64: &chost_arm64
   profile: default/linux/arm64/23.0
   pkgs_stage4: pkgs_stage4_arm64
   pkgs_all: pkgs_all_arm64
-  pkgs_custom: pkgs_custom_all
+  pkgs_custom: pkgs_custom_arm64
   kernel: "7.2"
   kernel_dtbs: true
   kernel_build_pkgs:
@@ -204,8 +204,16 @@ pkgs_all_amd64: &pkgs_all_amd64
 - sys-cluster/kubectl
 - sys-cluster/keepalived
 - sys-libs/freeipmi
-- www-apps/grafana
 
 pkgs_custom_all: &pkgs_custom_all
 - name: net-firewall/nftables
   use: -json
+
+pkgs_custom_arm64: &pkgs_custom_arm64
+- *pkgs_custom_all
+
+pkgs_custom_amd64: &pkgs_custom_amd64
+- *pkgs_custom_all
+- name: net-libs/nodejs:0/22
+  install: true
+- name: www-apps/grafana
