@@ -149,7 +149,6 @@ pkgs_all_common: &pkgs_all_common
 - net-misc/dhcpcd
 - net-vpn/wireguard-tools
 - net-wireless/bluez
-- net-wireless/hostapd
 - sys-apps/ethtool
 - sys-apps/kexec-tools
 - sys-apps/lshw
