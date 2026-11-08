@@ -8,6 +8,7 @@ MAKEOPTS="-j<%= cores %>"
 
 FEATURES="getbinpkg parallel-fetch usersync parallel-install"
 FEATURES="${FEATURES} nodoc noinfo"
+FEATURES="${FEATURES} -collision-protect -protect-owned"
 <% if build -%>
 FEATURES="${FEATURES} buildpkg fail-clean -ebuild-locks"
 <% end -%>

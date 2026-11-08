@@ -203,6 +203,7 @@ pkgs_all_amd64: &pkgs_all_amd64
 - sys-cluster/kubectl
 - sys-cluster/keepalived
 - sys-libs/freeipmi
+- www-apps/grafana
 
 custom_cmds_all: &custom_cmds_all
 - USE=-json emerge -B1 --nodeps net-firewall/nftables
@@ -213,6 +214,6 @@ custom_cmds_arm64: &custom_cmds_arm64
 custom_cmds_amd64: &custom_cmds_amd64
 - *custom_cmds_all
 # Use old nodejs to build grafana
-- emerge -1 net-libs/nodejs:0/22
-- emerge -1 www-apps/grafana
-- emerge -1 net-libs/nodejs
+#- emerge -1 net-libs/nodejs:0/22
+#- emerge -1 www-apps/grafana
+#- emerge -1 net-libs/nodejs
